@@ -1,0 +1,10 @@
+.header {
+    padding: 40px vw(80);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-logo {
+        width: 500px;
+        margin-bottom: 50px;
+    }
+}

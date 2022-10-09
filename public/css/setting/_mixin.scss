@@ -1,0 +1,16 @@
+// レイアウト幅
+$layout-width-inner: 1120px;
+
+// ブレークポイントを定義
+$breakpoints: (
+    "sp": "(max-width: 767px)",
+    "tab": "(max-width: #{$layout-width-inner - 1px})",
+    "pc": "(min-width: #{$layout-width-inner})",
+);
+
+// メディアクエリー
+@mixin mq($breakpoint: sp) {
+    @media #{map-get($breakpoints, $breakpoint)} {
+        @content;
+    }
+}

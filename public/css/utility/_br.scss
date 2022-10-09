@@ -1,0 +1,6 @@
+.tab-br {
+    display: none;
+    @include mq(tab) {
+        display: block;
+    }
+}

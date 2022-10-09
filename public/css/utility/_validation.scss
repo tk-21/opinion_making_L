@@ -1,0 +1,10 @@
+.invalid-feedback {
+    font-size: 14px;
+    margin: 5px 0;
+    color: $color-accent;
+}
+
+.is-invalid {
+    outline: 0;
+    box-shadow: 0 0 0 2px $color-accent inset;
+}

@@ -1,0 +1,13 @@
+.footer {
+    padding: 64px 0 40px;
+    .inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+    &-txt {
+        letter-spacing: 0.1em;
+        font-size: 12px;
+    }
+}

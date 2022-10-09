@@ -1,0 +1,13 @@
+.input {
+    background: $color-white;
+    line-height: 1.5;
+    width: 100%;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #ccc inset;
+    resize: none;
+    &:focus {
+        outline: 0;
+        box-shadow: 0 0 0 2px $color-accent inset;
+    }
+}

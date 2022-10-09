@@ -1,0 +1,38 @@
+.request {
+    padding: 40px 0 100px;
+    &-form {
+        background: $color-main;
+        padding: 50px;
+        margin-bottom: 50px;
+        border-radius: 4px;
+    }
+    &-ttl {
+        font-size: 20px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    &-list {
+        margin-bottom: 60px;
+    }
+    &-dttl {
+        margin-bottom: 10px;
+    }
+    &-item {
+        margin-bottom: 30px;
+    }
+    &-input {
+        height: 2.4em;
+        width: 100%;
+        padding: 0 16px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 1px #ccc inset;
+        &:focus {
+            outline: 0;
+            box-shadow: 0 0 0 2px $color-accent inset;
+        }
+    }
+    &-btn {
+        display: block;
+        margin: 0 auto;
+    }
+}

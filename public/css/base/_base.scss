@@ -1,0 +1,23 @@
+body {
+    font-family: "Roboto", "Noto Sans JP", sans-serif;
+    background: $color-base;
+    color: $color-text;
+    position: relative;
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    main {
+        position: relative;
+        z-index: 2;
+    }
+}
+img {
+    width: 100%;
+    vertical-align: bottom;
+}
+a {
+    display: inline-block;
+    color: $color-text;
+}

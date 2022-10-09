@@ -1,0 +1,49 @@
+.detail {
+    padding: 60px 0;
+    &-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
+    }
+    &-item {
+        width: calc((100% - 64px) / 3);
+        background: $color-main;
+        padding: 40px;
+        border-radius: 5px;
+        &:not(:nth-of-type(3n)) {
+            margin-right: 32px;
+            @include mq(sp) {
+                margin-right: 0;
+            }
+        }
+        .edit-btn {
+            margin-right: 24px;
+        }
+    }
+    &-topic {
+        &-ttl {
+            padding: 0.5em 0;
+            border-top: 1px solid $color-text-thin;
+            border-bottom: 1px solid $color-text-thin;
+            color: $color-text-thin;
+            margin-bottom: 15px;
+        }
+        &-data {
+            margin-bottom: 50px;
+        }
+    }
+    &-opinion {
+        background: $color-main;
+        padding: 40px;
+        width: 100%;
+        border-radius: 5px;
+        margin-bottom: 40px;
+        &-ttl {
+            color: $color-text-thin;
+            margin-bottom: 20px;
+        }
+        &-data {
+            margin-bottom: 20px;
+        }
+    }
+}

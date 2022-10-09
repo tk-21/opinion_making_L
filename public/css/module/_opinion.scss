@@ -1,0 +1,29 @@
+.opinion {
+    &-form {
+        background: $color-main;
+        padding: 50px;
+        margin-bottom: 50px;
+        border-radius: 4px;
+    }
+    &-ttl {
+        font-size: 24px;
+        margin-bottom: 36px;
+    }
+    &-list {
+        margin-bottom: 70px;
+    }
+    &-dttl {
+        margin-bottom: 10px;
+    }
+    &-item {
+        &:not(:last-of-type) {
+            margin-bottom: 40px;
+        }
+    }
+    &-input {
+        height: 2.4em;
+    }
+    &-textarea {
+        height: 200px;
+    }
+}

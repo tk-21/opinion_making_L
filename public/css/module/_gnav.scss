@@ -1,0 +1,10 @@
+.gnav {
+    &-list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &-item:not(:last-of-type) {
+        margin-right: 46px;
+    }
+}

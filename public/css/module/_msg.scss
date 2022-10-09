@@ -1,0 +1,13 @@
+.msg {
+    width: fit-content;
+    margin: 0 auto 20px;
+    padding: 20px;
+}
+.msg-info {
+    border: 1px solid $color-text;
+    color: $color-text;
+}
+.msg-error {
+    border: 1px solid $color-accent;
+    color: $color-accent;
+}

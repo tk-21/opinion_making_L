@@ -1,0 +1,22 @@
+.edit {
+    &-form {
+        background: $color-main;
+        padding: 50px;
+        margin-bottom: 50px;
+        border-radius: 4px;
+    }
+    &-list {
+        margin-bottom: 60px;
+    }
+    &-dttl {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    &-item {
+        margin-bottom: 30px;
+    }
+    &-name,
+    &-body {
+        height: 100px;
+    }
+}

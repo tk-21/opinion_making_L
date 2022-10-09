@@ -1,0 +1,13 @@
+@function per($px, $base: 1120) {
+    $value: ($px / $base) * 100%;
+    @return $value;
+}
+
+@function vw($px, $base: 1440) {
+    $value: ($px / $base) * 100vw;
+    @return $value;
+}
+
+@function division($numerator, $denominator) {
+    @return $numerator / $denominator;
+}

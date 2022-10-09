@@ -1,0 +1,62 @@
+.topic {
+    &-form {
+        background: $color-main;
+        padding: 50px;
+        margin-bottom: 50px;
+        border-radius: 4px;
+    }
+    &-ttl {
+        font-size: 24px;
+        margin-bottom: 36px;
+    }
+    &-txt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 50px 0;
+    }
+    &-list {
+        margin-bottom: 70px;
+    }
+    &-dttl {
+        margin-bottom: 10px;
+    }
+    &-item {
+        &:not(:last-of-type) {
+            margin-bottom: 40px;
+        }
+    }
+    &-input {
+        height: 2.4em;
+    }
+    &-textarea {
+        height: 200px;
+    }
+    &-select {
+        display: inline-block;
+        width: 100%;
+        padding: 0.6em 1.5em 0.6em 0.5em;
+        cursor: pointer;
+        line-height: 1.5;
+        font-size: 0.95em;
+        font-weight: 700;
+        color: $color-text;
+        border-radius: 4px;
+        background-color: $color-white;
+        box-shadow: 0 0 0 1px #ccc inset;
+        /* 👇三角マーク */
+        background-image: linear-gradient(
+                45deg,
+                transparent 50%,
+                rgba(0, 0, 0, 0.4) 50%
+            ),
+            linear-gradient(135deg, rgba(0, 0, 0, 0.4) 50%, transparent 50%);
+        background-size: 5px 5px, 5px 5px;
+        background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+        background-repeat: no-repeat;
+        &:focus {
+            outline: 0;
+            box-shadow: 0 0 0 2px $color-accent inset;
+        }
+    }
+}

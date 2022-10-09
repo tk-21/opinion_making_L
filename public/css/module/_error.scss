@@ -1,0 +1,15 @@
+.error {
+    .inner {
+        height: calc(100vh - 315px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &-list {
+        font-size: 32px;
+        text-align: center;
+    }
+    &-item {
+        margin-bottom: 1em;
+    }
+}
