@@ -63,10 +63,15 @@
     </header>
 
     <main>
-        <?php
-// $_SESSION['_msg']にセットされた配列の値をループで表示
-        Msg::flush();
-        ?>
+        {{--        フラッシュメッセージ--}}
+        {{--        成功時--}}
+        @if(session()->has('info'))
+            <p class="msg msg-info">{{ session('info') }}</p>
+        @endif
+        {{--        失敗時--}}
+        @if(session()->has('error'))
+            <p class="msg msg-error">{{ session('error') }}</p>
+        @endif
 
         @yield('content')
 
