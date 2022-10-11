@@ -22,7 +22,8 @@ class TopicController extends Controller
         [$topic_num, $max_page, $current_page, $range, $topics] = TopicQuery::getTopicsByUserId($user);
 
         // ユーザーに紐付くカテゴリーを取得
-        $categories = CategoryQuery::fetchByUserId($user);
+//        カテゴリーコントローラーへ移動させる
+//        $categories = CategoryQuery::fetchByUserId($user);
 
         // viewのindexメソッドを呼んで一覧を表示する
         \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, true, null);
