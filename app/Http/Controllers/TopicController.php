@@ -9,7 +9,24 @@ class TopicController extends Controller
 //    トピック一覧画面表示
     public function index()
     {
-        //
+        // セッションからユーザー情報を取得
+        $user = UserModel::getSession();
+
+        // ユーザーのセッションが何かおかしい場合は再度ログインしてもらう
+        if (!$user) {
+            Msg::push(Msg::ERROR, 'ログインしてください。');
+            redirect('login');
+        }
+
+        // ページング機能に必要な要素を取得
+        [$topic_num, $max_page, $current_page, $range, $topics] = TopicQuery::getTopicsByUserId($user);
+
+        // ユーザーに紐付くカテゴリーを取得
+//        カテゴリーコントローラーへ移動させる
+//        $categories = CategoryQuery::fetchByUserId($user);
+
+        // viewのindexメソッドを呼んで一覧を表示する
+        \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, true, null);
     }
 
 
@@ -77,15 +94,31 @@ class TopicController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+//    個別のトピック内容を表示
     public function show($id)
     {
-        //
+        $topic = new TopicModel;
+
+        // $_GET['id']から値を取ってくる
+        // getで値を取るときは第３引数をfalseに
+        $topic->id = get_param('id', null, false);
+
+        // idに該当するトピックを１件取ってくる
+        $fetchedTopic = TopicQuery::fetchById($topic);
+
+        // トピックが取れてこなかった場合、または削除されている場合は４０４ページにリダイレクト
+        if (empty($fetchedTopic) || isset($fetchedTopic->deleted_at)) {
+            Msg::push(Msg::ERROR, 'トピックが見つかりません。');
+            redirect('404');
+        }
+
+        // topic_idが格納されたtopicオブジェクトを渡し、そのtopic_idに紐付く反論、意見を取ってくる
+        $objections = ObjectionQuery::fetchByTopicId($topic);
+        $counterObjections = CounterObjectionQuery::fetchByTopicId($topic);
+        $opinion = OpinionQuery::fetchByTopicId($topic);
+
+        // 取れてきたものをviewに渡して表示
+        \view\detail\index($fetchedTopic, $objections, $counterObjections, $opinion);
     }
 
 
@@ -198,4 +231,46 @@ class TopicController extends Controller
         redirect(GO_HOME);
 
     }
+
+
+//    完了、未完了を切り替える
+    public function updateStatus()
+    {
+        $topic = new TopicModel;
+
+        $topic->id = get_param('topic_id', null);
+        $topic_status = get_param('topic_status', null);
+
+        // 反転させる
+        $topic->complete_flg = ($topic_status == '完了') ? '0' : '1';
+
+        $is_success = TopicQuery::updateStatus($topic);
+
+        echo $is_success;
+    }
+
+
+    // 削除確認画面を表示する
+    public function confirmDelete()
+    {
+        $topic = new TopicModel;
+        $topic->id = get_param('id', null, false);
+
+        $validation = new TopicValidation($topic);
+
+        if (!$validation->validateId()) {
+            redirect(GO_REFERER);
+        };
+
+        $valid_data = $validation->getValidData();
+
+        // idからトピックの内容を取ってくる
+        $fetchedTopic = TopicQuery::fetchById($valid_data);
+
+        // 削除確認画面を表示
+        \view\topic_delete\index($fetchedTopic);
+    }
+
 }
+
+
