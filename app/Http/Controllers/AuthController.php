@@ -6,14 +6,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    // ログイン画面を表示
     public function showLoginForm()
     {
-        if (Auth::isLogin()) {
-            redirect(GO_HOME);
-        }
-
-        // ログイン画面を表示
-        \view\auth\index(true);
+        return view('auth.index');
+//        \view\auth\index(true);
     }
 
 
