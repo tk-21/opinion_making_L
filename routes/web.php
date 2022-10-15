@@ -24,40 +24,62 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
+
 //ユーザー登録
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+
 //トピックス
-Route::get('/', [TopicController::class, 'index'])->name('topics.index');
-Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
-Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
-Route::get('/topics/{id}', [TopicController::class, 'show'])->name('topics.show');
-Route::get('/topics/edit/{id}', [TopicController::class, 'edit'])->name('topics.edit');
-Route::put('/topics/{id}', [TopicController::class, 'update'])->name('topics.update');
-Route::get('/topics/delete/{id}', [TopicController::class, 'confirmDelete'])->name('topics.confirmDelete');
-Route::delete('/topics/{id}', [TopicController::class, 'destroy'])->name('topics.destroy');
-Route::post('/topics/status/{id}', [TopicController::class, 'updateStatus'])->name('topics.updateStatus');
+Route::prefix('/topics')
+    ->name('topics.')
+    ->group(function () {
+        Route::get('/', [TopicController::class, 'index'])->name('index');
+        Route::get('/create', [TopicController::class, 'create'])->name('create');
+        Route::post('/', [TopicController::class, 'store'])->name('store');
+        Route::get('/{id}', [TopicController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [TopicController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [TopicController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [TopicController::class, 'confirmDelete'])->name('confirmDelete');
+        Route::delete('/{id}', [TopicController::class, 'destroy'])->name('destroy');
+        Route::post('/status/{id}', [TopicController::class, 'updateStatus'])->name('updateStatus');
+    });
+
 
 //カテゴリー
-Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
-Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::get('/categories/delete/{id}', [CategoryController::class, 'confirmDelete'])->name('categories.confirmDelete');
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::prefix('/categories')
+    ->name('categories.')
+    ->group(function () {
+        Route::post('/', [CategoryController::class, 'store'])->name('store');
+        Route::get('/{id}', [CategoryController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [CategoryController::class, 'confirmDelete'])->name('confirmDelete');
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+    });
+
 
 //反論
-Route::post('/objections', [ObjectionController::class, 'store'])->name('objections.store');
-Route::get('/objections/{id}', [ObjectionController::class, 'edit'])->name('objections.edit');
-Route::put('/objections/{id}', [ObjectionController::class, 'update'])->name('objections.update');
-Route::delete('/objections/{id}', [ObjectionController::class, 'destroy'])->name('objections.destroy');
+Route::prefix('/objections')
+    ->name('objections.')
+    ->group(function () {
+        Route::post('/', [ObjectionController::class, 'store'])->name('store');
+        Route::get('/{id}', [ObjectionController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ObjectionController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ObjectionController::class, 'destroy'])->name('destroy');
+    });
+
 
 //意見
-Route::get('/opinions/create', [OpinionController::class, 'create'])->name('opinions.create');
-Route::post('/opinions', [OpinionController::class, 'store'])->name('opinions.store');
-Route::get('/opinions/{id}', [OpinionController::class, 'edit'])->name('opinions.edit');
-Route::put('/opinions/{id}', [OpinionController::class, 'update'])->name('opinions.update');
+Route::prefix('/opinions')
+    ->name('opinions.')
+    ->group(function () {
+        Route::get('/create', [OpinionController::class, 'create'])->name('create');
+        Route::post('/', [OpinionController::class, 'store'])->name('store');
+        Route::get('/{id}', [OpinionController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [OpinionController::class, 'update'])->name('update');
+    });
+
 
 //パスワードリセット
 Route::get('/request', [PasswordResetController::class, 'showRequestForm'])->name('request.showRequestForm');
