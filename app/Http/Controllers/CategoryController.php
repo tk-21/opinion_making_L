@@ -164,26 +164,6 @@ class CategoryController extends Controller
 
     }
 
-//    カテゴリー削除処理
-    public function destroy($id)
-    {
-        $category = new CategoryModel;
-        $category->id = get_param('category_id', null);
-
-        $validation = new CategoryValidation($category);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        CategoryQuery::delete($valid_data) ? Msg::push(Msg::INFO, 'カテゴリーを削除しました。') : Msg::push(Msg::ERROR, '削除に失敗しました。');
-
-        redirect(GO_HOME);
-
-    }
-
 
     // 削除確認画面を表示する
     public function confirmDelete()
@@ -204,5 +184,26 @@ class CategoryController extends Controller
 
         // 削除確認画面を表示
         \view\category_delete\index($fetchedCategory);
+    }
+
+
+//    カテゴリー削除処理
+    public function destroy($id)
+    {
+        $category = new CategoryModel;
+        $category->id = get_param('category_id', null);
+
+        $validation = new CategoryValidation($category);
+
+        if (!$validation->validateId()) {
+            redirect(GO_REFERER);
+        };
+
+        $valid_data = $validation->getValidData();
+
+        CategoryQuery::delete($valid_data) ? Msg::push(Msg::INFO, 'カテゴリーを削除しました。') : Msg::push(Msg::ERROR, '削除に失敗しました。');
+
+        redirect(GO_HOME);
+
     }
 }
