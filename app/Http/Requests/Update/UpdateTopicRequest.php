@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Update;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTopicRequest extends FormRequest
+class UpdateTopicRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreTopicRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'id' => ['required', 'exists:topics,id', 'numeric'],
+            'title' => ['required'],
+            'body' => ['required'],
+            'position' => ['required'],
         ];
     }
 }
