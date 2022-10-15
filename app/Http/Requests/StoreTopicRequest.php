@@ -13,7 +13,7 @@ class StoreTopicRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required'],
+            'body' => ['required'],
+            'position' => ['required'],
         ];
     }
 }
