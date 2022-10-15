@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Update;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class UpdateObjectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:10'],
-            'password' => ['required', 'min:4', 'alpha-num'],
-            'email' => ['required', 'email:filter,dns']
+            'id' => ['required', 'exists:objections,id', 'numeric'],
+            'body' => ['required']
         ];
     }
 }
