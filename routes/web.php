@@ -19,71 +19,86 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//ログイン、ログアウト
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth')
+    ->group(function () {
 
-
+        Route::controller(AuthController::class)
+            ->group(function () {
+//ログイン
+                Route::get('/login', 'showLoginForm')->name('login');
+                Route::post('/login', 'login');
 //ユーザー登録
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+                Route::get('/register', 'showRegisterForm')->name('register');
+                Route::post('/register', 'register');
+            });
+
+
+//ログアウト
+        Route::post('/logout', [AuthController::class, 'logout']);
 
 
 //トピックス
-Route::prefix('/topics')
-    ->name('topics.')
-    ->group(function () {
-        Route::get('/', [TopicController::class, 'index'])->name('index');
-        Route::get('/create', [TopicController::class, 'create'])->name('create');
-        Route::post('/', [TopicController::class, 'store'])->name('store');
-        Route::get('/{id}', [TopicController::class, 'show'])->name('show');
-        Route::get('/edit/{id}', [TopicController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [TopicController::class, 'update'])->name('update');
-        Route::get('/delete/{id}', [TopicController::class, 'confirmDelete'])->name('confirmDelete');
-        Route::delete('/{id}', [TopicController::class, 'destroy'])->name('destroy');
-        Route::post('/status/{id}', [TopicController::class, 'updateStatus'])->name('updateStatus');
-    });
+        Route::prefix('/topics')
+            ->controller(TopicController::class)
+            ->name('topics.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'show')->name('show');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+                Route::post('/status/{id}', 'updateStatus')->name('updateStatus');
+            });
 
 
 //カテゴリー
-Route::prefix('/categories')
-    ->name('categories.')
-    ->group(function () {
-        Route::post('/', [CategoryController::class, 'store'])->name('store');
-        Route::get('/{id}', [CategoryController::class, 'show'])->name('show');
-        Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::get('/delete/{id}', [CategoryController::class, 'confirmDelete'])->name('confirmDelete');
-        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
-    });
+        Route::prefix('/categories')
+            ->controller(CategoryController::class)
+            ->name('categories.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'show')->name('show');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+            });
 
 
 //反論
-Route::prefix('/objections')
-    ->name('objections.')
-    ->group(function () {
-        Route::post('/', [ObjectionController::class, 'store'])->name('store');
-        Route::get('/{id}', [ObjectionController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [ObjectionController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ObjectionController::class, 'destroy'])->name('destroy');
-    });
+        Route::prefix('/objections')
+            ->controller(ObjectionController::class)
+            ->name('objections.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+            });
 
 
 //意見
-Route::prefix('/opinions')
-    ->name('opinions.')
-    ->group(function () {
-        Route::get('/create', [OpinionController::class, 'create'])->name('create');
-        Route::post('/', [OpinionController::class, 'store'])->name('store');
-        Route::get('/{id}', [OpinionController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [OpinionController::class, 'update'])->name('update');
+        Route::prefix('/opinions')
+            ->controller(OpinionController::class)
+            ->name('opinions.')
+            ->group(function () {
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+            });
+
     });
 
-
 //パスワードリセット
-Route::get('/request', [PasswordResetController::class, 'showRequestForm'])->name('request.showRequestForm');
-Route::post('/request', [PasswordResetController::class, 'request']);
-Route::get('/request/complete', [PasswordResetController::class, 'showEmailSent'])->name('request.complete');
-Route::get('/reset', [PasswordResetController::class, 'showResetForm'])->name('reset.showResetForm');
-Route::post('/reset', [PasswordResetController::class, 'reset']);
+Route::controller(PasswordResetController::class)
+    ->group(function () {
+        Route::get('/request', 'showRequestForm')->name('request.showRequestForm');
+        Route::post('/request', 'request');
+        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
+        Route::get('/reset', 'showResetForm')->name('reset.showResetForm');
+        Route::post('/reset', 'reset');
+    });

@@ -28,7 +28,7 @@ class AuthController extends Controller
             // セッションを再生成する処理(セキュリティ対策)
             $request->session()->regenerate();
 
-            // ミドルウェアに対応したリダイレクト(後述)
+            // ミドルウェアに対応したリダイレクト
             // 下記はredirect('/admin/blogs')に類似
             return redirect()->intended('/admin/blogs');
 
@@ -36,28 +36,11 @@ class AuthController extends Controller
             // その際にwithErrorsを使ってエラーメッセージで手動で指定する
             // リダイレクト後のビュー内でold関数によって直前の入力内容を取得出来る項目をonlyInputで指定する
             return back()->withErrors([
-                'email' => 'メールアドレスまたはパスワードが正しくありません',
-            ])->onlyInput('email');
+                'name' => 'ユーザー名またはパスワードが正しくありません',
+            ])->onlyInput('name');
         }
 
 
-        // 値の取得
-//        $name = get_param('name', '');
-//        $password = get_param('password', '');
-//
-//        // バリデーション
-//        $validation = new UserValidation($name, $password);
-//
-//        if (
-//            !($validation->validateName()
-//                * $validation->validatePassword())
-//        ) {
-//            redirect(GO_REFERER);
-//        }
-//
-//        $valid_name = $validation->getValidName();
-//        $valid_password = $validation->getValidPassword();
-//
 //        // POSTで渡ってきたユーザーネームとパスワードでログインに成功した場合、
 //        if (Auth::login($valid_name, $valid_password)) {
 //            // 登録されたユーザーオブジェクトの情報を取ってくる
@@ -76,7 +59,7 @@ class AuthController extends Controller
     }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
 //        if (Auth::logout()) {
 //            Msg::push(Msg::INFO, 'ログアウトしました。');
@@ -92,19 +75,17 @@ class AuthController extends Controller
         // セッションを無効化を再生成(セキュリティ対策のため)
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return to_route('login');
 
     }
 
 
     public function showRegisterForm()
     {
-        if (Auth::isLogin()) {
-            redirect(GO_HOME);
-        }
+        return view('auth.index');
 
         // 登録画面を表示
-        \view\auth\index(false);
+//        \view\auth\index(false);
     }
 
 
@@ -116,7 +97,9 @@ class AuthController extends Controller
 
         User::create($validated);
 
-        return to_route('login')->with('success', '登録が完了しました');
+        $name = Auth::user()->name;
+
+        return to_route('topics.index')->with('success', $name . 'さん、ようこそ。');
 
         // 登録処理
 //        if (Auth::regist($valid_name, $valid_password, $valid_email)) {
