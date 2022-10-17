@@ -75,19 +75,17 @@ class AuthController extends Controller
         // セッションを無効化を再生成(セキュリティ対策のため)
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return to_route('login');
 
     }
 
 
     public function showRegisterForm()
     {
-        if (Auth::isLogin()) {
-            redirect(GO_HOME);
-        }
+        return view('auth.index');
 
         // 登録画面を表示
-        \view\auth\index(false);
+//        \view\auth\index(false);
     }
 
 
