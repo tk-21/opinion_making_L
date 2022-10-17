@@ -20,75 +20,78 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')
-    ->controller(AuthController::class)
     ->group(function () {
+
+        Route::controller(AuthController::class)
+            ->group(function () {
 //ログイン
-        Route::get('/login', 'showLoginForm')->name('login');
-        Route::post('/login', 'login');
+                Route::get('/login', 'showLoginForm')->name('login');
+                Route::post('/login', 'login');
 //ユーザー登録
-        Route::get('/register', 'showRegisterForm')->name('register');
-        Route::post('/register', 'register');
-    });
+                Route::get('/register', 'showRegisterForm')->name('register');
+                Route::post('/register', 'register');
+            });
 
 
 //ログアウト
-Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout']);
 
 
 //トピックス
-Route::prefix('/topics')
-    ->controller(TopicController::class)
-    ->name('topics.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{id}', 'show')->name('show');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::put('/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-        Route::post('/status/{id}', 'updateStatus')->name('updateStatus');
-    });
+        Route::prefix('/topics')
+            ->controller(TopicController::class)
+            ->name('topics.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'show')->name('show');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+                Route::post('/status/{id}', 'updateStatus')->name('updateStatus');
+            });
 
 
 //カテゴリー
-Route::prefix('/categories')
-    ->controller(CategoryController::class)
-    ->name('categories.')
-    ->group(function () {
-        Route::post('/', 'store')->name('store');
-        Route::get('/{id}', 'show')->name('show');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::put('/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
+        Route::prefix('/categories')
+            ->controller(CategoryController::class)
+            ->name('categories.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'show')->name('show');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+            });
 
 
 //反論
-Route::prefix('/objections')
-    ->controller(ObjectionController::class)
-    ->name('objections.')
-    ->group(function () {
-        Route::post('/', 'store')->name('store');
-        Route::get('/{id}', 'edit')->name('edit');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
+        Route::prefix('/objections')
+            ->controller(ObjectionController::class)
+            ->name('objections.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+            });
 
 
 //意見
-Route::prefix('/opinions')
-    ->controller(OpinionController::class)
-    ->name('opinions.')
-    ->group(function () {
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{id}', 'edit')->name('edit');
-        Route::put('/{id}', 'update')->name('update');
-    });
+        Route::prefix('/opinions')
+            ->controller(OpinionController::class)
+            ->name('opinions.')
+            ->group(function () {
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{id}', 'edit')->name('edit');
+                Route::put('/{id}', 'update')->name('update');
+            });
 
+    });
 
 //パスワードリセット
 Route::controller(PasswordResetController::class)
