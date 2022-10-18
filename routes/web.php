@@ -19,22 +19,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(AuthController::class)
+    ->group(function () {
+//ログイン
+        Route::get('/login', 'showLoginForm')->name('login');
+        Route::post('/login', 'login');
+//ユーザー登録
+        Route::get('/register', 'showRegisterForm')->name('register');
+        Route::post('/register', 'register');
+    });
+
+
+//パスワードリセット
+Route::controller(PasswordResetController::class)
+    ->group(function () {
+        Route::get('/request', 'showRequestForm')->name('showRequestForm');
+        Route::post('/request', 'request');
+        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
+        Route::get('/reset', 'showResetForm')->name('showResetForm');
+        Route::post('/reset', 'reset');
+    });
+
+
 Route::middleware('auth')
     ->group(function () {
-
-        Route::controller(AuthController::class)
-            ->group(function () {
-//ログイン
-                Route::get('/login', 'showLoginForm')->name('login');
-                Route::post('/login', 'login');
-//ユーザー登録
-                Route::get('/register', 'showRegisterForm')->name('register');
-                Route::post('/register', 'register');
-            });
-
+        Route::get('/', [TopicController::class, 'index']);
 
 //ログアウト
-        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 //トピックス
@@ -91,14 +103,4 @@ Route::middleware('auth')
                 Route::put('/{id}', 'update')->name('update');
             });
 
-    });
-
-//パスワードリセット
-Route::controller(PasswordResetController::class)
-    ->group(function () {
-        Route::get('/request', 'showRequestForm')->name('request.showRequestForm');
-        Route::post('/request', 'request');
-        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
-        Route::get('/reset', 'showResetForm')->name('reset.showResetForm');
-        Route::post('/reset', 'reset');
     });
