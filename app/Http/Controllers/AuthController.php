@@ -14,8 +14,7 @@ class AuthController extends Controller
     // ログイン画面を表示
     public function showLoginForm()
     {
-        return view('auth.index');
-//        \view\auth\index(true);
+        return view('auth.index', ['is_login' => true]);
     }
 
 
@@ -61,13 +60,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-//        if (Auth::logout()) {
-//            Msg::push(Msg::INFO, 'ログアウトしました。');
-//            redirect('login');
-//        } else {
-//            Msg::push(Msg::ERROR, 'ログアウトに失敗しました。');
-//        }
-
         // ログアウト処理
         Auth::logout();
         // 現在使っているセッションを無効化(セキュリティ対策のため)
@@ -75,17 +67,13 @@ class AuthController extends Controller
         // セッションを無効化を再生成(セキュリティ対策のため)
         $request->session()->regenerateToken();
 
-        return to_route('login');
-
+        return to_route('login')->with('success', 'ログアウトしました。');
     }
 
 
     public function showRegisterForm()
     {
-        return view('auth.index');
-
-        // 登録画面を表示
-//        \view\auth\index(false);
+        return view('auth.index', ['is_login' => false]);
     }
 
 
