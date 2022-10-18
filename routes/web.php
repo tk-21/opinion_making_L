@@ -33,19 +33,20 @@ Route::controller(AuthController::class)
 //パスワードリセット
 Route::controller(PasswordResetController::class)
     ->group(function () {
-        Route::get('/request', 'showRequestForm')->name('request.showRequestForm');
+        Route::get('/request', 'showRequestForm')->name('showRequestForm');
         Route::post('/request', 'request');
         Route::get('/request/complete', 'showEmailSent')->name('request.complete');
-        Route::get('/reset', 'showResetForm')->name('reset.showResetForm');
+        Route::get('/reset', 'showResetForm')->name('showResetForm');
         Route::post('/reset', 'reset');
     });
 
 
 Route::middleware('auth')
     ->group(function () {
+        Route::get('/', [TopicController::class, 'index']);
 
 //ログアウト
-        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 //トピックス

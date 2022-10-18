@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use Illuminate\Support\Facades\Auth; @endphp
+    <!DOCTYPE html>
 <html lang="ja">
 
 <head>
@@ -24,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Roboto&display=swap" rel="stylesheet">
     <!-- style.css -->
-    <link rel="stylesheet" href="../../public/css/style.min.css"/>
+    <link rel="stylesheet" href="{{ asset('/css/style.css') }}"/>
     <!-- プラグインのcss -->
 </head>
 
@@ -43,23 +44,23 @@
     <header class="header">
         <div class="header-left">
             <h1 class="header-logo">
-                <a href="<?php the_url('/'); ?>">
-                    <img src="../../public/img/title.png" alt="思考トレーニングアプリ">
+                <a href="{{ route('topics.index') }}">
+                    <img src="/img/title.png" alt="思考トレーニングアプリ">
                 </a>
             </h1>
-            <?php if ($is_login) : ?>
-            <p class="header-txt">ユーザー名： <?php echo $user->name; ?></p>
-            <?php endif; ?>
+            @auth
+                <p class="header-txt">ユーザー名： {{ Auth::user()->name }}</p>
+            @endauth
         </div>
 
-        <?php if ($is_login) : ?>
-        <nav class="gnav">
-            <ul class="gnav-list">
-                <li class="gnav-item"><a href="<?php the_url('topic_create'); ?>" class="create-btn">トピック作成</a></li>
-                <li class="gnav-item"><a href="<?php the_url('logout'); ?>" class="logout-btn">ログアウト</a></li>
-            </ul>
-        </nav>
-        <?php endif; ?>
+        @auth
+            <nav class="gnav">
+                <ul class="gnav-list">
+                    <li class="gnav-item"><a href="{{ route('topics.create') }}" class="create-btn">トピック作成</a></li>
+                    <li class="gnav-item"><a href="{{ route('logout') }}" class="logout-btn">ログアウト</a></li>
+                </ul>
+            </nav>
+        @endauth
     </header>
 
     <main>
@@ -87,11 +88,11 @@
 </div>
 
 <!-- jQuery本体 -->
-<script src="../../public/js/jquery-3.6.0.min.js"></script>
+<script src="/js/jquery-3.6.0.min.js"></script>
 <!-- jQueryプラグイン -->
 <!-- js -->
-<script src="../../public/js/form-validate.js"></script>
-<script src="../../public/js/ajax.js"></script>
+<script src="/js/form-validate.js"></script>
+<script src="/js/ajax.js"></script>
 </body>
 
 </html>

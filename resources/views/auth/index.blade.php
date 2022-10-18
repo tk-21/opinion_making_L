@@ -2,20 +2,22 @@
 
 @section('content')
 
-    // ログイン画面の表示かアカウント登録画面の表示かを切り替える
-    @if ( $is_login )
-        $header_ttl = 'ログイン';
-        $submit_btn = 'ログイン';
-        $link_btn = 'アカウント登録';
-    @else
-        $header_ttl = 'アカウント登録';
-        $submit_btn = '登録';
-        $link_btn = 'ログイン画面へ';
-    @endif
+    @php
+        // ログイン画面の表示かアカウント登録画面の表示かを切り替える
+        if ( $is_login ) {
+            $header_ttl = 'ログイン';
+            $submit_btn = 'ログイン';
+            $link_btn = 'アカウント登録';
+        } else {
+            $header_ttl = 'アカウント登録';
+            $submit_btn = '登録';
+            $link_btn = 'ログイン画面へ';
+        }
+    @endphp
 
     <section class="auth">
         <div class="auth-inner">
-            <form class="auth-form validate-form" action="<?php echo CURRENT_URI; ?>" method="POST" novalidate>
+            <form class="auth-form validate-form" action="" method="POST" novalidate>
                 <h2 class="auth-ttl">{{ $header_ttl }}</h2>
                 <dl class="auth-list">
 
@@ -47,10 +49,10 @@
             </form>
 
             @if ($is_login)
-                <a class="back-btn _home" href="<?php the_url('request'); ?>">パスワードを忘れた方はこちら</a>
-                <a class="back-btn _home" href="<?php the_url('register'); ?>">{{ $link_btn }}</a>
+                <a class="back-btn _home" href="{{ route('showRequestForm') }}">パスワードを忘れた方はこちら</a>
+                <a class="back-btn _home" href="{{ route('register') }}">{{ $link_btn }}</a>
             @else
-                <a class="back-btn _home" href="<?php the_url('login'); ?>">{{ $link_btn }}</a>
+                <a class="back-btn _home" href="{{ route('login') }}">{{ $link_btn }}</a>
             @endif
 
         </div>
