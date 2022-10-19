@@ -1,30 +1,12 @@
 @extends('layouts.default')
 
 @section('content')
-    @php
-        $topics = escape($topics);
-        $categories = escape($categories);
-
-        $title = $is_home ? 'トピック一覧' : sprintf('カテゴリー名：%s', $fetchedCategory->name);
-        $path = $is_home ? 'home' : 'category';
-    @endphp
 
     <article class="home" id="home">
         <div class="inner">
             <ul class="home-list">
                 <li class="home-topic">
-                    <h2 class="home-ttl">{{ $title }}</h2>
-
-                    @if ($path === 'category')
-                            <?php $category_id = get_param('id', null, false) ?>
-
-                        <a class="category-edit-btn"
-                           href="<?php the_url(sprintf('category_edit?id=%s', $category_id)); ?>">カテゴリー名編集</a>
-                        <a class="category-delete-btn"
-                           href="<?php the_url(sprintf('category_delete?id=%s', $category_id)); ?>">削除</a>
-
-                    @endif
-
+                    <h2 class="home-ttl">トピック一覧</h2>
 
                     @if ($topics)
 
@@ -32,10 +14,10 @@
                             @foreach ($topics as $topic)
                                 @php
                                     // complete_flgが１のときは完了、０のときは未完了を表示させる
-                                    $label = $topic->complete_flg ? '完了' : '未完了';
+                                    $label = $topic->status ? '完了' : '未完了';
 
                                     // ラベルのデザインを切り替える
-                                    $label_style = $topic->complete_flg ? 'complete' : 'incomplete';
+                                    $label_style = $topic->status ? 'complete' : 'incomplete';
 
                                     // 日時表示をフォーマットするためオブジェクトを作成
                                     $created_at = new DateTime($topic->created_at);
@@ -46,12 +28,12 @@
                                         完了チェック
                                         <input type="checkbox" class="home-topic-status" name="complete_flg"
                                                data-id="{{ $topic->id }}"
-                                               <?php if ($topic->complete_flg) : ?>checked <?php endif; ?>>
+                                               @if ($topic->status) checked @endif>
                                         <span class="dummy-checkbox"></span>
                                     </label>
 
                                     <li class="home-topic-item">
-                                        <a href="<?php the_url(sprintf('detail?id=%s', $topic->id)); ?>">
+                                        <a href="{{ route('topics.show', ['topic' => $topic->id]) }}">
                                             <p class="home-topic-label _{{ $label_style }}">{{ $label }}</p>
                                             <div class="home-topic-body">
                                                 <time
@@ -66,8 +48,8 @@
                         </ul>
 
                         <div class="paging">
-                            <p class="paging-txt">全件数：<?php echo $topic_num; ?>件</p>
-                                <?php $category_id = get_param('id', null, false) ?>
+                            <p class="paging-txt">全件数：{{ $topics->total() }}件</p>
+                            {{--                                <?php $category_id = get_param('id', null, false) ?>--}}
                             <ul class="paging-list">
                                     <?php // 現在のページが２以上のときだけ「戻る」にリンクを付ける
                                     ?>
@@ -108,19 +90,10 @@
                             </ul>
                         </div>
 
-                        @if ($path === 'category')
-                            <a class="back-btn _home" href="<?php the_url('/'); ?>">すべてのトピックを表示</a>
-                        @endif
-
                     @else
 
-                        @if ($path === 'category')
-                            <p class="home-txt _bottom">このカテゴリーに分類されているトピックがありません。</p>
-                            <a class="back-btn _home" href="<?php the_url('/'); ?>">ホームへ戻る</a>
-                            <?php else : ?>
-                            <p class="home-txt _top">まだトピックがありません。</p>
-                            <p class="home-txt _top">トピックを作成してみましょう！</p>
-                        @endif
+                        <p class="home-txt _top">まだトピックがありません。</p>
+                        <p class="home-txt _top">トピックを作成してみましょう！</p>
 
                     @endif
 
