@@ -9,8 +9,9 @@ class TopicController extends Controller
 //    トピック一覧画面表示
     public function index()
     {
-        $topics = Topic::latest('created_at')->paginate(10);
-        $categories = Category::latest('created_at');
+        $user = Auth::user();
+        $topics = Topic::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         return view('index', compact('topics', 'categories'));
 
         // viewのindexメソッドを呼んで一覧を表示する

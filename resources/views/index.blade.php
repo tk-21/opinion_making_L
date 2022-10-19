@@ -51,42 +51,42 @@
                             <p class="paging-txt">全件数：{{ $topics->total() }}件</p>
                             {{--                                <?php $category_id = get_param('id', null, false) ?>--}}
                             <ul class="paging-list">
-                                    <?php // 現在のページが２以上のときだけ「戻る」にリンクを付ける
-                                    ?>
+                                {{--                                    現在のページが２以上のときだけ「戻る」にリンクを付ける--}}
                                 <li class="paging-item">
-                                        <?php if ($current_page >= 2) : ?>
-                                    <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page - 1))); ?>">&laquo;</a>
-                                    <?php else : ?>
-                                    <span class="paging-pre">&laquo;</span>
-                                    <?php endif; ?>
+                                    @if ($topics->currentPage() >= 2)
+                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page - 1))); ?>">&laquo;</a>
+                                    @else
+                                        <span class="paging-pre">&laquo;</span>
+                                    @endif
                                 </li>
 
-                                    <?php // １〜最大ページまでループさせ、$rangeで表示範囲を５件に絞る。現在のページ番号にはリンクを付けない。
-                                    ?>
-                                    <?php for ($i = 1;
-                                               $i <= $max_page;
-                                               $i++) : ?>
-                                    <?php if ($i >= $current_page - $range && $i <= $current_page + $range) : ?>
-                                <li class="paging-item">
-                                        <?php if ($i == $current_page) : ?>
-                                    <span class="paging-now"><?php echo $i; ?></span>
-                                    <?php else : ?>
-                                    <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, $i)); ?>"
-                                       class="paging-num"><?php echo $i; ?></a>
-                                    <?php endif; ?>
-                                </li>
-                                <?php endif; ?>
-                                <?php endfor; ?>
+                                {{--                                    １〜最大ページまでループさせ、$rangeで表示範囲を５件に絞る。現在のページ番号にはリンクを付けない。--}}
+                                {{--                                    <?php for ($i = 1;--}}
+                                {{--                                               $i <= $max_page;--}}
+                                {{--                                               $i++) : ?>--}}
+                                {{--                                    <?php if ($i >= $current_page - $range && $i <= $current_page + $range) : ?>--}}
+                                @foreach($topics->getUrlRange($topics->currentPage()-3, $topics->currentPage()+3) as $page=>$link)
 
-                                    <?php // 現在ページが最大ページ数を超えたら「進む」にリンクを付けない
-                                    ?>
-                                <li class="paging-item">
-                                        <?php if ($current_page < $max_page) : ?>
-                                    <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page + 1))); ?>">&raquo;</a>
-                                    <?php else : ?>
-                                    <span class="paging-next">&raquo;</span>
-                                    <?php endif; ?>
-                                </li>
+                                    <li class="paging-item">
+                                            <?php if ($i == $current_page) : ?>
+                                        <span class="paging-now"><?php echo $i; ?></span>
+                                        <?php else : ?>
+                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, $i)); ?>"
+                                           class="paging-num"><?php echo $i; ?></a>
+                                        <?php endif; ?>
+                                    </li>
+                                        <?php endif; ?>
+                                        <?php endfor; ?>
+
+                                        <?php // 現在ページが最大ページ数を超えたら「進む」にリンクを付けない
+                                        ?>
+                                    <li class="paging-item">
+                                            <?php if ($current_page < $max_page) : ?>
+                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page + 1))); ?>">&raquo;</a>
+                                        <?php else : ?>
+                                        <span class="paging-next">&raquo;</span>
+                                        <?php endif; ?>
+                                    </li>
                             </ul>
                         </div>
 
@@ -110,7 +110,7 @@
                     <ul class="home-category-list">
                         @foreach ($categories as $category)
                             <li class="home-category-item">
-                                <a href="<?php the_url(sprintf('category?id=%s', $category->id)); ?>">
+                                <a href="{{ route('categories.show', ['category' => $category->id]) }}">
                                     {{ $category->name }}
                                 </a>
                             </li>
