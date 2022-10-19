@@ -9,24 +9,13 @@ class TopicController extends Controller
 //    トピック一覧画面表示
     public function index()
     {
-        // セッションからユーザー情報を取得
-        $user = UserModel::getSession();
-
-        // ユーザーのセッションが何かおかしい場合は再度ログインしてもらう
-        if (!$user) {
-            Msg::push(Msg::ERROR, 'ログインしてください。');
-            redirect('login');
-        }
-
-        // ページング機能に必要な要素を取得
-        [$topic_num, $max_page, $current_page, $range, $topics] = TopicQuery::getTopicsByUserId($user);
-
-        // ユーザーに紐付くカテゴリーを取得
-//        カテゴリーコントローラーへ移動させる
-//        $categories = CategoryQuery::fetchByUserId($user);
+        $user = Auth::user();
+        $topics = Topic::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('index', compact('topics', 'categories'));
 
         // viewのindexメソッドを呼んで一覧を表示する
-        \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, true, null);
+//        \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, true, null);
     }
 
 

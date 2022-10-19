@@ -14,7 +14,7 @@ class AuthController extends Controller
     // ログイン画面を表示
     public function showLoginForm()
     {
-        return view('auth.index', ['is_login' => true]);
+        return view('auth.login');
     }
 
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('auth.index', ['is_login' => false]);
+        return view('auth.register');
     }
 
 

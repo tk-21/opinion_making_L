@@ -41,9 +41,12 @@ Route::controller(PasswordResetController::class)
     });
 
 
+//以下はログイン状態のときのみ表示
 Route::middleware('auth')
     ->group(function () {
-        Route::get('/', [TopicController::class, 'index']);
+
+//ホーム画面（トピックス一覧）
+        Route::get('/', [TopicController::class, 'index'])->name('index');
 
 //ログアウト
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
