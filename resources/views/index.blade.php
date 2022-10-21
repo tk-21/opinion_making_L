@@ -49,44 +49,38 @@
 
                         <div class="paging">
                             <p class="paging-txt">全件数：{{ $topics->total() }}件</p>
-                            {{--                                <?php $category_id = get_param('id', null, false) ?>--}}
+                            <p class="paging-txt">{{ $topics->firstItem() }}~{{ $topics->lastItem() }}を表示中</p>
                             <ul class="paging-list">
-                                {{--                                    現在のページが２以上のときだけ「戻る」にリンクを付ける--}}
+
+                                {{--                                前へ戻るボタン--}}
                                 <li class="paging-item">
-                                    @if ($topics->currentPage() >= 2)
-                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page - 1))); ?>">&laquo;</a>
-                                    @else
+                                    @if ($topics->onFirstPage())
                                         <span class="paging-pre">&laquo;</span>
+                                    @else
+                                        <a href="{{ $topics->previousPageUrl() }}">&laquo;</a>
                                     @endif
                                 </li>
 
-                                {{--                                    １〜最大ページまでループさせ、$rangeで表示範囲を５件に絞る。現在のページ番号にはリンクを付けない。--}}
-                                {{--                                    <?php for ($i = 1;--}}
-                                {{--                                               $i <= $max_page;--}}
-                                {{--                                               $i++) : ?>--}}
-                                {{--                                    <?php if ($i >= $current_page - $range && $i <= $current_page + $range) : ?>--}}
+                                {{--                                ページ番号--}}
                                 @foreach($topics->getUrlRange($topics->currentPage()-3, $topics->currentPage()+3) as $page=>$link)
-
                                     <li class="paging-item">
-                                            <?php if ($i == $current_page) : ?>
-                                        <span class="paging-now"><?php echo $i; ?></span>
-                                        <?php else : ?>
-                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, $i)); ?>"
-                                           class="paging-num"><?php echo $i; ?></a>
-                                        <?php endif; ?>
+                                        @if($page === $topics->currentPage())
+                                            <span class="paging-now">{{ $page }}</span>
+                                        @else
+                                            <a href="{{ $link }}" class="paging-num">{{ $page }}</a>
+                                        @endif
                                     </li>
-                                        <?php endif; ?>
-                                        <?php endfor; ?>
+                                @endforeach
 
-                                        <?php // 現在ページが最大ページ数を超えたら「進む」にリンクを付けない
-                                        ?>
-                                    <li class="paging-item">
-                                            <?php if ($current_page < $max_page) : ?>
-                                        <a href="<?php the_url(sprintf('%s?id=%s&page=%d', $path, $category_id, ($current_page + 1))); ?>">&raquo;</a>
-                                        <?php else : ?>
+                                {{--                                次へ進むボタン--}}
+                                <li class="paging-item">
+                                    @if($topics->hasMorePages())
+                                        <a href="{{ $topics->nextPageUrl() }}">&raquo;</a>
+                                    @else
                                         <span class="paging-next">&raquo;</span>
-                                        <?php endif; ?>
-                                    </li>
+                                    @endif
+                                </li>
+
                             </ul>
                         </div>
 
