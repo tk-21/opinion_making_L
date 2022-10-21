@@ -57,7 +57,14 @@
             <nav class="gnav">
                 <ul class="gnav-list">
                     <li class="gnav-item"><a href="{{ route('topics.create') }}" class="create-btn">トピック作成</a></li>
-                    <li class="gnav-item"><a href="{{ route('logout') }}" class="logout-btn">ログアウト</a></li>
+                    <li class="gnav-item">
+                        <form action="{{ route('logout')}}" method="POST">
+                            @csrf
+                            <button type="submit" class="logout-btn">
+                                ログアウト
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </nav>
         @endauth

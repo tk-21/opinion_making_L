@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
@@ -13,9 +16,6 @@ class TopicController extends Controller
         $topics = Topic::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(10);
         $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         return view('index', compact('topics', 'categories'));
-
-        // viewのindexメソッドを呼んで一覧を表示する
-//        \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, true, null);
     }
 
 
