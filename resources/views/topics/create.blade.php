@@ -4,8 +4,7 @@
     <section class="topic">
         <div class="inner">
             <form class="topic-form validate-form" action="" method="POST" novalidate>
-                <input type="hidden" name="id" value="{{ $topic->id }}">
-
+                @csrf
                 <h2 class="topic-ttl">トピック作成</h2>
 
                 <dl class="topic-list">
@@ -38,7 +37,7 @@
                                 @foreach ($categories as $category)
                                     <option
                                         value="{{ $category->id }}"
-                                        @if($category->id === old('category_id', $topic->category_id)) selected @endif>
+                                        @if($category->id === old('category_id')) selected @endif>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -50,7 +49,7 @@
 
                 <button type="submit" class="register-btn">登録</button>
 
-                <a class="back-btn _home" href="{{ route('/') }}">ホームへ戻る</a>
+                <a class="back-btn _home" href="{{ route('index') }}">ホームへ戻る</a>
 
             </form>
         </div>
