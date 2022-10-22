@@ -22,21 +22,9 @@ class TopicController extends Controller
 //    トピック作成画面を表示
     public function create()
     {
-        $user = UserModel::getSession();
-        $categories = CategoryQuery::fetchByUserId($user);
-
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点で、データを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $topic = TopicModel::getSessionAndFlush();
-
-        // データが取れてこなかった場合、初期化して表示
-        if (empty($topic)) {
-            $topic = new TopicModel;
-        }
-
-        \view\topic\index($topic, $categories, SHOW_CREATE);
-
+        $user = Auth::user();
+        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('topics.create', compact('categories'));
     }
 
 
@@ -112,50 +100,11 @@ class TopicController extends Controller
 
 
 //    トピック編集画面を表示
-    public function edit($id)
+    public function edit(Topic $topic)
     {
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点でデータを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $topic = TopicModel::getSessionAndFlush();
-
-        $user = UserModel::getSession();
-        $categories = CategoryQuery::fetchByUserId($user);
-
-
-        // データが取れてくれば、その値を画面表示し、処理を終了
-        if (!empty($topic)) {
-            \view\topic\index($topic, $categories, SHOW_EDIT);
-            return;
-        }
-
-        // データが取れてこなかった場合、TopicModelのインスタンスを作成して初期化
-        $topic = new TopicModel;
-
-        // GETリクエストから取得したidをモデルに格納
-        $topic->id = get_param('id', null, false);
-
-        // バリデーションが失敗した場合は、画面遷移させない
-        $validation = new TopicValidation($topic);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        // idからトピックの内容を取ってくる
-        $fetchedTopic = TopicQuery::fetchById($valid_data);
-
-        // トピックが取れてこなかったら４０４ページへリダイレクト
-        if (!$fetchedTopic) {
-            redirect('404');
-            return;
-        }
-
-        // トピックが取れてきたら、トピックを渡してviewのindexを表示
-        \view\topic\index($fetchedTopic, $categories, SHOW_EDIT);
-
+        $user = Auth::user();
+        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('topics.edit', compact('topic', 'categories'));
     }
 
 

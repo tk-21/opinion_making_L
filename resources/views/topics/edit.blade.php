@@ -5,12 +5,14 @@
         <div class="inner">
             <form class="topic-form validate-form" action="" method="POST" novalidate>
                 @csrf
-                <h2 class="topic-ttl">トピック作成</h2>
+                <input type="hidden" name="id" value="{{ $topic->id }}">
+
+                <h2 class="topic-ttl">トピック編集</h2>
 
                 <dl class="topic-list">
                     <dt class="topic-dttl"><label for="title" onclick="">タイトル</label></dt>
                     <dd class="topic-item">
-                        <input type="text" id="title" name="title" value="{{ old('title') }}"
+                        <input type="text" id="title" name="title" value="{{ old('title', $topic->title) }}"
                                class="topic-input input validate-target" maxlength="100" autofocus required>
                         <p class="invalid-feedback"></p>
                     </dd>
@@ -18,14 +20,14 @@
                     <dt class="topic-dttl"><label for="body" onclick="">本文</label></dt>
                     <dd class="topic-item">
                         <textarea id="body" name="body" class="topic-textarea input validate-target" autofocus
-                                  required>{{ old('body') }}</textarea>
+                                  required>{{ old('body', $topic->body) }}</textarea>
                         <p class="invalid-feedback"></p>
                     </dd>
 
                     <dt class="topic-dttl"><label for="position" onclick="">ポジション</label></dt>
                     <dd class="topic-item">
                         <textarea id="position" name="position" class="topic-textarea input validate-target" autofocus
-                                  required>{{ old('position') }}</textarea>
+                                  required>{{ old('position', $topic->position) }}</textarea>
                         <p class="invalid-feedback"></p>
                     </dd>
 
@@ -37,7 +39,7 @@
                                 @foreach ($categories as $category)
                                     <option
                                         value="{{ $category->id }}"
-                                        @if($category->id === old('category_id')) selected @endif>
+                                        @if($category->id === old('category_id', $topic->category_id)) selected @endif>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -47,9 +49,9 @@
 
                 </dl>
 
-                <button type="submit" class="register-btn">登録</button>
+                <button type="submit" class="register-btn">更新</button>
 
-                <a class="back-btn _home" href="{{ route('index') }}">ホームへ戻る</a>
+                <a class="back-btn _back" href="{{ route('topics.show') }}">戻る</a>
 
             </form>
         </div>
