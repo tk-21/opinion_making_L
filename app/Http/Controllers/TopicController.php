@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Store\StoreTopicRequest;
 use App\Http\Requests\Update\UpdateTopicRequest;
 use App\Models\Category;
+use App\Models\CounterObjection;
+use App\Models\Objection;
+use App\Models\Opinion;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,31 +43,14 @@ class TopicController extends Controller
 
 
 //    個別のトピック内容を表示
-    public
-    function show($id)
+    public function show($id)
     {
-        $topic = new TopicModel;
+        $topic = Topic::findOrFail($id);
+        $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+        $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+        $opinion = Opinion::where('topic_id', $topic->id)->get();
 
-        // $_GET['id']から値を取ってくる
-        // getで値を取るときは第３引数をfalseに
-        $topic->id = get_param('id', null, false);
-
-        // idに該当するトピックを１件取ってくる
-        $fetchedTopic = TopicQuery::fetchById($topic);
-
-        // トピックが取れてこなかった場合、または削除されている場合は４０４ページにリダイレクト
-        if (empty($fetchedTopic) || isset($fetchedTopic->deleted_at)) {
-            Msg::push(Msg::ERROR, 'トピックが見つかりません。');
-            redirect('404');
-        }
-
-        // topic_idが格納されたtopicオブジェクトを渡し、そのtopic_idに紐付く反論、意見を取ってくる
-        $objections = ObjectionQuery::fetchByTopicId($topic);
-        $counterObjections = CounterObjectionQuery::fetchByTopicId($topic);
-        $opinion = OpinionQuery::fetchByTopicId($topic);
-
-        // 取れてきたものをviewに渡して表示
-        \view\detail\index($fetchedTopic, $objections, $counterObjections, $opinion);
+        return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
 

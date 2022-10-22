@@ -4,7 +4,7 @@
 
     <section class="topic">
         <div class="inner">
-            <form class="topic-form validate-form" action="" method="POST" novalidate>
+            <form class="topic-form validate-form" action="{{ route('topics.store') }}" method="POST" novalidate>
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                 <h2 class="topic-ttl">トピック作成</h2>
