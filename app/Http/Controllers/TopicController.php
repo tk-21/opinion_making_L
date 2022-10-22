@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Store\StoreTopicRequest;
+use App\Http\Requests\Update\UpdateTopicRequest;
 use App\Models\Category;
+use App\Models\CounterObjection;
+use App\Models\Objection;
+use App\Models\Opinion;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,73 +34,23 @@ class TopicController extends Controller
 
 
 //    トピック登録処理
-    public function store(Request $request)
+    public function store(StoreTopicRequest $request)
     {
-        $topic = new TopicModel;
-
-        // モデルに値をセット
-        $topic->title = get_param('title', null);
-        $topic->body = get_param('body', null);
-        $topic->position = get_param('position', null);
-        $topic->category_id = get_param('category_id', null);
-
-        try {
-            $validation = new TopicValidation($topic);
-
-            // バリデーションに引っかかった場合
-            if (!$validation->checkCreate()) {
-                Msg::push(Msg::ERROR, 'トピックの登録に失敗しました。');
-                // エラー時の値の復元のための処理
-                // バリデーションに引っかかって登録に失敗した場合、入力した値を保持しておくため、セッションに保存する
-                TopicModel::setSession($topic);
-
-                // 元の画面に戻す
-                redirect(GO_REFERER);
-            }
-
-            // バリデーションが問題なかった場合、バリデーションが完了しているデータを取ってくる
-            $valid_data = $validation->getValidData();
-
-            // セッションに格納されているユーザー情報のオブジェクトを取ってくる
-            $user = UserModel::getSession();
-
-            // オブジェクトを渡してクエリを実行
-            TopicQuery::insert($valid_data, $user) ? Msg::push(Msg::INFO, 'トピックを登録しました。') : Msg::push(Msg::ERROR, '登録に失敗しました。');
-
-            redirect(GO_HOME);
-        } catch (Exception $e) {
-            // エラー内容を出力する
-            Msg::push(Msg::ERROR, $e->getMessage());
-
-        }
+        $validated = $request->validated();
+        Topic::create($validated);
+        return to_route('index')->with('info', 'トピックを登録しました。');
     }
 
 
 //    個別のトピック内容を表示
     public function show($id)
     {
-        $topic = new TopicModel;
+        $topic = Topic::findOrFail($id);
+        $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+        $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+        $opinion = Opinion::where('topic_id', $topic->id)->get();
 
-        // $_GET['id']から値を取ってくる
-        // getで値を取るときは第３引数をfalseに
-        $topic->id = get_param('id', null, false);
-
-        // idに該当するトピックを１件取ってくる
-        $fetchedTopic = TopicQuery::fetchById($topic);
-
-        // トピックが取れてこなかった場合、または削除されている場合は４０４ページにリダイレクト
-        if (empty($fetchedTopic) || isset($fetchedTopic->deleted_at)) {
-            Msg::push(Msg::ERROR, 'トピックが見つかりません。');
-            redirect('404');
-        }
-
-        // topic_idが格納されたtopicオブジェクトを渡し、そのtopic_idに紐付く反論、意見を取ってくる
-        $objections = ObjectionQuery::fetchByTopicId($topic);
-        $counterObjections = CounterObjectionQuery::fetchByTopicId($topic);
-        $opinion = OpinionQuery::fetchByTopicId($topic);
-
-        // 取れてきたものをviewに渡して表示
-        \view\detail\index($fetchedTopic, $objections, $counterObjections, $opinion);
+        return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
 
@@ -109,49 +64,19 @@ class TopicController extends Controller
 
 
 //    トピック更新処理
-    public function update(Request $request, $id)
+    public function update(UpdateTopicRequest $request, $id)
     {
-        // TopicModelのインスタンスを作成
-        $topic = new TopicModel;
+        $topic = Topic::findOrFail($id);
+        $updateData = $request->validated();
+        $topic->update($updateData);
 
-        // POSTで渡ってきた値をモデルに格納
-        $topic->id = get_param('id', null);
-        $topic->title = get_param('title', null);
-        $topic->body = get_param('body', null);
-        $topic->position = get_param('position', null);
-        $topic->category_id = get_param('category_id', null);
-
-        // 更新処理
-        try {
-            $validation = new TopicValidation($topic);
-
-            // バリデーションに引っかかった場合
-            if (!$validation->checkEdit()) {
-                Msg::push(Msg::ERROR, 'トピックの更新に失敗しました。');
-                // エラー時の値の復元のための処理
-                // バリデーションに引っかかって登録に失敗した場合、入力した値を保持しておくため、セッションに保存する
-                TopicModel::setSession($topic);
-
-                // 元の画面に戻す
-                redirect(GO_REFERER);
-            }
-
-            $valid_data = $validation->getValidData();
-
-            // バリデーションに問題なかった場合、オブジェクトを渡してクエリを実行
-            TopicQuery::update($valid_data) ? Msg::push(Msg::INFO, 'トピックを更新しました。') : Msg::push(Msg::ERROR, '更新に失敗しました。');
-
-            redirect(sprintf('detail?id=%d', $topic->id));
-        } catch (Exception $e) {
-            // エラー内容を出力する
-            Msg::push(Msg::ERROR, $e->getMessage());
-        }
-
+        return to_route('topics.show', $topic->id)->with('info', 'トピックを更新しました。');
     }
 
 
 //    トピック削除処理
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         $topic = new TopicModel;
         $topic->id = get_param('topic_id', null);
@@ -172,7 +97,8 @@ class TopicController extends Controller
 
 
 //    完了、未完了を切り替える
-    public function updateStatus()
+    public
+    function updateStatus()
     {
         $topic = new TopicModel;
 
@@ -188,8 +114,9 @@ class TopicController extends Controller
     }
 
 
-    // 削除確認画面を表示する
-    public function confirmDelete()
+// 削除確認画面を表示する
+    public
+    function confirmDelete()
     {
         $topic = new TopicModel;
         $topic->id = get_param('id', null, false);

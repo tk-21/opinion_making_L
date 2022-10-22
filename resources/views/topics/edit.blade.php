@@ -3,7 +3,7 @@
 
     <section class="topic">
         <div class="inner">
-            <form class="topic-form validate-form" action="" method="POST" novalidate>
+            <form class="topic-form validate-form" action="{{ route('topics.update') }}" method="POST" novalidate>
                 @csrf
                 <input type="hidden" name="id" value="{{ $topic->id }}">
 
