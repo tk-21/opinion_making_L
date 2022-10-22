@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Objection extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'body',
+        'topic_id'
+    ];
 }

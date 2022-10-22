@@ -115,7 +115,7 @@
                 <dd class="detail-opinion-data">{{ $opinion->opinion }}</dd>
                 <dt class="detail-opinion-ttl">その理由：</dt>
                 <dd class="detail-opinion-data">{{ $opinion->reason }}</dd>
-                <a class="edit-btn" href="<?php the_url(sprintf('opinion_%s?id=%d', $is_edit, $topic->id)); ?>">編集</a>
+                <a class="edit-btn" href="{{ route('opinions.edit', ['topic' => $topic->id]) }}">編集</a>
             </dl>
 
             <a class="back-btn _home" href="{{ route('index') }}">トピック一覧に戻る</a>
