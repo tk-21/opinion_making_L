@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CounterObjection extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'body',
+        'topic_id'
+    ];
 }

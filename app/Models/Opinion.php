@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Opinion extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'opinion',
+        'reason',
+        'topic_id'
+    ];
 }
