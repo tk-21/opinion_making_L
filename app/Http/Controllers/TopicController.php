@@ -22,19 +22,10 @@ class TopicController extends Controller
 //    トピック作成画面を表示
     public function create()
     {
-        $user = UserModel::getSession();
-        $categories = CategoryQuery::fetchByUserId($user);
+        $user = Auth::user();
+        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点で、データを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $topic = TopicModel::getSessionAndFlush();
-
-        // データが取れてこなかった場合、初期化して表示
-        if (empty($topic)) {
-            $topic = new TopicModel;
-        }
-
+        return view('topics.create', compact('user', 'categories'));
         \view\topic\index($topic, $categories, SHOW_CREATE);
 
     }
