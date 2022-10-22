@@ -12,7 +12,7 @@
                     <dt class="auth-dttl"><label for="name" onclick="">ユーザーネーム</label></dt>
                     <dd class="auth-item">
                         <input id="name" type="text" name="name" class="auth-input validate-target" autofocus required
-                               minlength="4" maxlength="10" pattern="[a-zA-Z0-9]+">
+                               minlength="4" maxlength="10" pattern="[a-zA-Z0-9]+" value="{{ old('name') }}">
                         <p class="invalid-feedback"></p>
                     </dd>
 
