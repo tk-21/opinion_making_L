@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 @extends('layouts.default')
 @section('content')
 
@@ -5,6 +6,7 @@
         <div class="inner">
             <form class="topic-form validate-form" action="" method="POST" novalidate>
                 @csrf
+                <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                 <h2 class="topic-ttl">トピック作成</h2>
 
                 <dl class="topic-list">
