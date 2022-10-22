@@ -29,7 +29,7 @@ class TopicController extends Controller
     {
         $user = Auth::user();
         $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        return view('topics.create', compact('categories'));
+        return view('topics.create', compact('user', 'categories'));
     }
 
 

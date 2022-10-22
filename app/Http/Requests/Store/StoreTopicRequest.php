@@ -27,6 +27,7 @@ class StoreTopicRequest extends FormRequest
             'title' => ['required'],
             'body' => ['required'],
             'position' => ['required'],
+            'user_id' => ['required', 'numeric'],
         ];
     }
 }
