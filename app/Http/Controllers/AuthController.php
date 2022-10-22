@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use MongoDB\Driver\Session;
 
 class AuthController extends Controller
 {
@@ -28,32 +29,15 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // ミドルウェアに対応したリダイレクト
-            return redirect()->intended('/');
-
-            // 一つ前のページ(ログイン画面)にリダイレクト
-            // その際にwithErrorsを使ってエラーメッセージで手動で指定する
-            // リダイレクト後のビュー内でold関数によって直前の入力内容を取得出来る項目をonlyInputで指定する
-            return back()->withErrors([
-                'name' => 'ユーザー名またはパスワードが正しくありません',
-            ])->onlyInput('name');
+            return redirect()->intended('/')->with('info', Auth::user()->name . 'さん、ようこそ。');
         }
 
-
-//        // POSTで渡ってきたユーザーネームとパスワードでログインに成功した場合、
-//        if (Auth::login($valid_name, $valid_password)) {
-//            // 登録されたユーザーオブジェクトの情報を取ってくる
-//            $user = UserModel::getSession();
-//            // オブジェクトに格納されている情報を使って、セッションのINFOにメッセージを入れる
-//            Msg::push(Msg::INFO, "{$user->name}さん、ようこそ。");
-//            // パスが空だったらトップページに移動
-//            redirect(GO_HOME);
-//        } else {
-//            // Auth::loginによって何がエラーかというのはpushされるので、ここでエラーメッセージは出さなくてよい
-//
-//            // refererは一つ前のリクエストのパスを表す
-//            // 認証が失敗したときは、一つ前のリクエスト（GETメソッドでのログインページへのパス）に戻る
-//            redirect(GO_REFERER);
-//        }
+        // 一つ前のページ(ログイン画面)にリダイレクト
+        // その際にwithErrorsを使ってエラーメッセージで手動で指定する
+        // リダイレクト後のビュー内でold関数によって直前の入力内容を取得出来る項目をonlyInputで指定する
+        return back()->withErrors([
+            'name' => 'ユーザー名またはパスワードが正しくありません',
+        ])->onlyInput('name');
     }
 
 
@@ -66,7 +50,7 @@ class AuthController extends Controller
         // セッションを無効化を再生成(セキュリティ対策のため)
         $request->session()->regenerateToken();
 
-        return to_route('login')->with('success', 'ログアウトしました。');
+        return to_route('login')->with('info', 'ログアウトしました。');
     }
 
 
@@ -79,22 +63,14 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
         $validated = $request->validated();
-
+        //パスワードをハッシュ化
         $validated['password'] = Hash::make($validated['password']);
+        //登録実行
+        $user = User::create($validated);
+        //登録したユーザーでログイン
+        Auth::login($user);
 
-        User::create($validated);
-
-        $name = Auth::user();
-
-        return to_route('topics.index')->with('success', $name . 'さん、ようこそ。');
-
-        // 登録処理
-//        if (Auth::regist($valid_name, $valid_password, $valid_email)) {
-//            Msg::push(Msg::INFO, "{$name}さん、ようこそ。");
-//            redirect(GO_HOME);
-//        } else {
-//            redirect(GO_REFERER);
-//        }
+        return to_route('index')->with('info', $user->name . 'さん、ようこそ。');
     }
 
 }
