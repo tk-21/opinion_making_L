@@ -5,6 +5,7 @@
     <section class="auth">
         <div class="auth-inner">
             <form class="auth-form validate-form" action="" method="POST" novalidate>
+                @csrf
                 <h2 class="auth-ttl">ログイン</h2>
                 <dl class="auth-list">
 

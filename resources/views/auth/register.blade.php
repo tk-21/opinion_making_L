@@ -4,7 +4,8 @@
 
     <section class="auth">
         <div class="auth-inner">
-            <form class="auth-form validate-form" action="" method="POST" novalidate>
+            <form class="auth-form validate-form" action="{{ route('register') }}" method="POST" novalidate>
+                @csrf
                 <h2 class="auth-ttl">アカウント登録</h2>
                 <dl class="auth-list">
 

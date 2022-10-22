@@ -22,11 +22,11 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)
     ->group(function () {
 //ログイン
-        Route::get('/login', 'showLoginForm')->name('login');
-        Route::post('/login', 'login');
+        Route::get('/login', 'showLoginForm')->name('loginForm');
+        Route::post('/login', 'login')->name('login');
 //ユーザー登録
-        Route::get('/register', 'showRegisterForm')->name('register');
-        Route::post('/register', 'register');
+        Route::get('/register', 'showRegisterForm')->name('registerForm');
+        Route::post('/register', 'register')->name('register');
     });
 
 
@@ -34,10 +34,10 @@ Route::controller(AuthController::class)
 Route::controller(PasswordResetController::class)
     ->group(function () {
         Route::get('/request', 'showRequestForm')->name('showRequestForm');
-        Route::post('/request', 'request');
+        Route::post('/request', 'request')->name('request');
         Route::get('/request/complete', 'showEmailSent')->name('request.complete');
         Route::get('/reset', 'showResetForm')->name('showResetForm');
-        Route::post('/reset', 'reset');
+        Route::post('/reset', 'reset')->name('reset');
     });
 
 

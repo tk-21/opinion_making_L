@@ -28,8 +28,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // ミドルウェアに対応したリダイレクト
-            // 下記はredirect('/admin/blogs')に類似
-            return redirect()->intended('/admin/blogs');
+            return redirect()->intended('/');
 
             // 一つ前のページ(ログイン画面)にリダイレクト
             // その際にwithErrorsを使ってエラーメッセージで手動で指定する
@@ -85,7 +84,7 @@ class AuthController extends Controller
 
         User::create($validated);
 
-        $name = Auth::user()->name;
+        $name = Auth::user();
 
         return to_route('topics.index')->with('success', $name . 'さん、ようこそ。');
 
