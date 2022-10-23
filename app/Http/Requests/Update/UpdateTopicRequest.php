@@ -24,7 +24,7 @@ class UpdateTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:topics,id', 'numeric'],
+//            'id' => ['required', 'exists:topics,id', 'numeric'],
             'title' => ['required'],
             'body' => ['required'],
             'position' => ['required'],

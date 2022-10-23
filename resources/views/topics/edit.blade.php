@@ -3,9 +3,11 @@
 
     <section class="topic">
         <div class="inner">
-            <form class="topic-form validate-form" action="{{ route('topics.update') }}" method="POST" novalidate>
+            <form class="topic-form validate-form" action="{{ route('topics.update', ['topic' => $topic]) }}"
+                  method="POST"
+                  novalidate>
                 @csrf
-                <input type="hidden" name="id" value="{{ $topic->id }}">
+                @method('PUT')
 
                 <h2 class="topic-ttl">トピック編集</h2>
 
@@ -51,7 +53,7 @@
 
                 <button type="submit" class="register-btn">更新</button>
 
-                <a class="back-btn _back" href="{{ route('topics.show') }}">戻る</a>
+                <a class="back-btn _back" href="{{ route('topics.show', ['topic' => $topic]) }}">戻る</a>
 
             </form>
         </div>
