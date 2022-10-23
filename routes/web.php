@@ -60,12 +60,12 @@ Route::middleware('auth')
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
-                Route::get('/{id}', 'show')->name('show');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
-                Route::delete('/{id}', 'destroy')->name('destroy');
-                Route::post('/status/{id}', 'updateStatus')->name('updateStatus');
+                Route::get('/{topic}', 'show')->name('show');
+                Route::get('/edit/{topic}', 'edit')->name('edit');
+                Route::put('/{topic}', 'update')->name('update');
+                Route::get('/delete/{topic}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{topic}', 'destroy')->name('destroy');
+                Route::post('/status/{topic}', 'updateStatus')->name('updateStatus');
             });
 
 
