@@ -28,7 +28,7 @@
                     </dl>
 
                     <a class="edit-btn" href="{{ route('topics.edit', ['topic' => $topic]) }}">編集</a>
-                    <a class="delete-btn" href="{{ route('topics.destroy', ['topic' => $topic]) }}">削除</a>
+                    <a class="delete-btn" href="{{ route('topics.confirmDelete', ['topic' => $topic]) }}">削除</a>
                 </li>
 
                 <li class="detail-item">

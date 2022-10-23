@@ -1,7 +1,6 @@
 @extends('layouts.default')
 @section('content')
     {{--
-        $topic = escape($topic);
 
         $complete_flg = $topic->complete_flg ? '完了' : '未完了';
 
@@ -13,7 +12,6 @@
     <section class="confirm">
         <div class="inner">
             <form class="confirm-form" action="" method="post">
-                <input type="hidden" name="topic_id" value="<?php echo $topic->id; ?>">
 
                 <h2 class="confirm-ttl">トピック削除確認</h2>
 

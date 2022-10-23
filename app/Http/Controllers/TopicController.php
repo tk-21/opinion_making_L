@@ -50,7 +50,6 @@ class TopicController extends Controller
         $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $opinion = Opinion::where('topic_id', $topic->id)->first();
 
-//        dd($opinion);
         return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
@@ -76,24 +75,12 @@ class TopicController extends Controller
 
 
 //    トピック削除処理
-    public
-    function destroy($id)
+    public function destroy($id)
     {
-        $topic = new TopicModel;
-        $topic->id = get_param('topic_id', null);
+        $topic = Topic::findOrFail($id);
+        $topic->delete();
 
-        $validation = new TopicValidation($topic);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        TopicQuery::delete($valid_data) ? Msg::push(Msg::INFO, 'トピックを削除しました。') : Msg::push(Msg::ERROR, '削除に失敗しました。');
-
-        redirect(GO_HOME);
-
+        return to_route('index')->with('info', 'トピックを削除しました。');
     }
 
 
@@ -116,25 +103,9 @@ class TopicController extends Controller
 
 
 // 削除確認画面を表示する
-    public
-    function confirmDelete()
+    public function confirmDelete(Topic $topic)
     {
-        $topic = new TopicModel;
-        $topic->id = get_param('id', null, false);
-
-        $validation = new TopicValidation($topic);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        // idからトピックの内容を取ってくる
-        $fetchedTopic = TopicQuery::fetchById($valid_data);
-
-        // 削除確認画面を表示
-        \view\topic_delete\index($fetchedTopic);
+        return view('topics.delete', ['topic' => $topic]);
     }
 
 }
