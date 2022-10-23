@@ -75,11 +75,11 @@ Route::middleware('auth')
             ->name('categories.')
             ->group(function () {
                 Route::post('/', 'store')->name('store');
-                Route::get('/{id}', 'show')->name('show');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::get('/delete/{id}', 'confirmDelete')->name('confirmDelete');
-                Route::delete('/{id}', 'destroy')->name('destroy');
+                Route::get('/{category}', 'show')->name('show');
+                Route::get('/edit/{category}', 'edit')->name('edit');
+                Route::put('/{category}', 'update')->name('update');
+                Route::get('/delete/{category}', 'confirmDelete')->name('confirmDelete');
+                Route::delete('/{category}', 'destroy')->name('destroy');
             });
 
 
@@ -89,9 +89,9 @@ Route::middleware('auth')
             ->name('objections.')
             ->group(function () {
                 Route::post('/', 'store')->name('store');
-                Route::get('/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::delete('/{id}', 'destroy')->name('destroy');
+                Route::get('/{objection}', 'edit')->name('edit');
+                Route::put('/{objection}', 'update')->name('update');
+                Route::delete('/{objection}', 'destroy')->name('destroy');
             });
 
 
@@ -102,8 +102,8 @@ Route::middleware('auth')
             ->group(function () {
                 Route::get('/create', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
-                Route::get('/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
+                Route::get('/{opinion}', 'edit')->name('edit');
+                Route::put('/{opinion}', 'update')->name('update');
             });
 
     });
