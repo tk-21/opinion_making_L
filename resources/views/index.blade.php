@@ -33,7 +33,7 @@
                                     </label>
 
                                     <li class="home-topic-item">
-                                        <a href="{{ route('topics.show', ['topic' => $topic->id]) }}">
+                                        <a href="{{ route('topics.show', ['id' => $topic]) }}">
                                             <p class="home-topic-label _{{ $label_style }}">{{ $label }}</p>
                                             <div class="home-topic-body">
                                                 <time

@@ -48,8 +48,9 @@ class TopicController extends Controller
         $topic = Topic::findOrFail($id);
         $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
-        $opinion = Opinion::where('topic_id', $topic->id)->get();
+        $opinion = Opinion::where('topic_id', $topic->id)->first();
 
+//        dd($opinion);
         return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 

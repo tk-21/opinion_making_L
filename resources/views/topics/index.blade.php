@@ -6,7 +6,7 @@
 
         // カテゴリーが削除されていれば未選択にする
         $category_name = $topic->category_delete ? '未選択' : $topic->category_name;
-        $is_edit = $opinion ? 'edit' : 'create';
+//        $is_edit = $opinion ? 'edit' : 'create';
     @endphp
 
     <section class="detail">
@@ -27,8 +27,8 @@
                         <dd class="detail-topic-data">{{ $category_name }}</dd>
                     </dl>
 
-                    <a class="edit-btn" href="{{ route('topics.edit', ['topic' => $topic]) }}">編集</a>
-                    <a class="delete-btn" href="{{ route('topics.destroy', ['topic' => $topic]) }}">削除</a>
+                    <a class="edit-btn" href="{{ route('topics.edit', ['id' => $topic]) }}">編集</a>
+                    <a class="delete-btn" href="{{ route('topics.destroy', ['id' => $topic]) }}">削除</a>
                 </li>
 
                 <li class="detail-item">
@@ -112,10 +112,10 @@
 
             <dl class="detail-opinion">
                 <dt class="detail-opinion-ttl">最終的な意見：</dt>
-                <dd class="detail-opinion-data">{{ $opinion->opinion }}</dd>
+                <dd class="detail-opinion-data">{{ $opinion->opinion ?? '' }}</dd>
                 <dt class="detail-opinion-ttl">その理由：</dt>
-                <dd class="detail-opinion-data">{{ $opinion->reason }}</dd>
-                <a class="edit-btn" href="{{ route('opinions.edit', ['topic' => $topic->id]) }}">編集</a>
+                <dd class="detail-opinion-data">{{ $opinion->reason ?? '' }}</dd>
+                <a class="edit-btn" href="{{ route('opinions.edit', ['id' => $topic]) }}">編集</a>
             </dl>
 
             <a class="back-btn _home" href="{{ route('index') }}">トピック一覧に戻る</a>
