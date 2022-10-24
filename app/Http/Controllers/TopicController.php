@@ -42,15 +42,14 @@ class TopicController extends Controller
     }
 
 
-//    個別のトピック内容を表示
-    public function show($id)
+//    トピック詳細画面を表示
+    public function show(Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
         $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $opinion = Opinion::where('topic_id', $topic->id)->first();
 
-        return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
+        return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
 
@@ -64,9 +63,8 @@ class TopicController extends Controller
 
 
 //    トピック更新処理
-    public function update(UpdateTopicRequest $request, $id)
+    public function update(UpdateTopicRequest $request, Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
         $updateData = $request->validated();
         $topic->update($updateData);
 
@@ -75,11 +73,9 @@ class TopicController extends Controller
 
 
 //    トピック削除処理
-    public function destroy($id)
+    public function destroy(Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
         $topic->delete();
-
         return to_route('index')->with('info', 'トピックを削除しました。');
     }
 
