@@ -8,7 +8,7 @@
                 <li class="home-topic">
                     <h2 class="home-ttl">トピック一覧</h2>
 
-                    @if ($topics)
+                    @if ($topics->isNotEmpty())
 
                         <ul class="home-topic-list">
                             @foreach ($topics as $topic)

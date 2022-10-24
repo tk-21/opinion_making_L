@@ -42,15 +42,13 @@ class TopicController extends Controller
     }
 
 
-//    個別のトピック内容を表示
-    public function show($id)
+//    トピック詳細画面を表示
+    public function show(Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
         $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $opinion = Opinion::where('topic_id', $topic->id)->first();
-
-        return view('topics.index', compact('topic', 'objections', 'counterObjections', 'opinion'));
+        return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
 
@@ -64,41 +62,11 @@ class TopicController extends Controller
 
 
 //    トピック更新処理
-    public function update(UpdateTopicRequest $request, $id)
+    public function update(UpdateTopicRequest $request, Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
         $updateData = $request->validated();
         $topic->update($updateData);
-
         return to_route('topics.show', $topic->id)->with('info', 'トピックを更新しました。');
-    }
-
-
-//    トピック削除処理
-    public function destroy($id)
-    {
-        $topic = Topic::findOrFail($id);
-        $topic->delete();
-
-        return to_route('index')->with('info', 'トピックを削除しました。');
-    }
-
-
-//    完了、未完了を切り替える
-    public
-    function updateStatus()
-    {
-        $topic = new TopicModel;
-
-        $topic->id = get_param('topic_id', null);
-        $topic_status = get_param('topic_status', null);
-
-        // 反転させる
-        $topic->complete_flg = ($topic_status == '完了') ? '0' : '1';
-
-        $is_success = TopicQuery::updateStatus($topic);
-
-        echo $is_success;
     }
 
 
@@ -106,6 +74,32 @@ class TopicController extends Controller
     public function confirmDelete(Topic $topic)
     {
         return view('topics.delete', ['topic' => $topic]);
+    }
+
+
+//    トピック削除処理
+    public function destroy(Topic $topic)
+    {
+        $topic->delete();
+        return to_route('index')->with('info', 'トピックを削除しました。');
+    }
+
+
+//    完了、未完了を切り替える
+    public function updateStatus(Request $request)
+    {
+        $topic = Topic::findOrFail($request->topic_id);
+
+        // 反転させる
+        $topic->status = ($topic_status == '完了') ? '0' : '1';
+
+        $topic->update([
+            'status' => $request->topic_status
+        ]);
+
+        $is_success = TopicQuery::updateStatus($topic);
+
+        echo $is_success;
     }
 
 }

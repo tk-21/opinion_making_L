@@ -5,7 +5,7 @@
         $status = $topic->status ? '完了' : '未完了';
 
         // カテゴリーが削除されていれば未選択にする
-        $category_name = $topic->category_delete ? '未選択' : $topic->category_name;
+        $category_name = empty($topic->category->deleted_at) ? '未選択' : $topic->category->name;
     @endphp
 
     <section class="confirm">
@@ -41,7 +41,7 @@
 
                     <dt class="confirm-dttl">カテゴリー</dt>
                     <dd class="confirm-item">
-                        {{ $category->name }}
+                        {{ $category_name }}
                     </dd>
                 </dl>
 
