@@ -48,7 +48,6 @@ class TopicController extends Controller
         $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
         $opinion = Opinion::where('topic_id', $topic->id)->first();
-
         return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
     }
 
@@ -67,8 +66,14 @@ class TopicController extends Controller
     {
         $updateData = $request->validated();
         $topic->update($updateData);
-
         return to_route('topics.show', $topic->id)->with('info', 'トピックを更新しました。');
+    }
+
+
+// 削除確認画面を表示する
+    public function confirmDelete(Topic $topic)
+    {
+        return view('topics.delete', ['topic' => $topic]);
     }
 
 
@@ -81,27 +86,20 @@ class TopicController extends Controller
 
 
 //    完了、未完了を切り替える
-    public
-    function updateStatus()
+    public function updateStatus(Request $request)
     {
-        $topic = new TopicModel;
-
-        $topic->id = get_param('topic_id', null);
-        $topic_status = get_param('topic_status', null);
+        $topic = Topic::findOrFail($request->topic_id);
 
         // 反転させる
-        $topic->complete_flg = ($topic_status == '完了') ? '0' : '1';
+        $topic->status = ($topic_status == '完了') ? '0' : '1';
+
+        $topic->update([
+            'status' => $request->topic_status
+        ]);
 
         $is_success = TopicQuery::updateStatus($topic);
 
         echo $is_success;
-    }
-
-
-// 削除確認画面を表示する
-    public function confirmDelete(Topic $topic)
-    {
-        return view('topics.delete', ['topic' => $topic]);
     }
 
 }

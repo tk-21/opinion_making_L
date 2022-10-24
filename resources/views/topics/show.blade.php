@@ -2,11 +2,12 @@
 @section('content')
 
     @php
-        $status = $topic->status ? '完了' : '未完了';
+        dd($topic);
+            $status = $topic->status ? '完了' : '未完了';
 
-        // カテゴリーが削除されていれば未選択にする
-        $category_name = $topic->category_delete ? '未選択' : $topic->category_name;
-//        $is_edit = $opinion ? 'edit' : 'create';
+            // カテゴリーが削除されていれば未選択にする
+            $category_name = $topic->category->deleted_at ? '未選択' : $topic->category->name;
+    //        $is_edit = $opinion ? 'edit' : 'create';
     @endphp
 
     <section class="detail">
