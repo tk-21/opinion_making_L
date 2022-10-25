@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CounterObjection extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'body',
