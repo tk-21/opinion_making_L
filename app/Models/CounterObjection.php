@@ -14,4 +14,9 @@ class CounterObjection extends Model
         'body',
         'topic_id'
     ];
+
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
 }

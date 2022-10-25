@@ -16,4 +16,9 @@ class Opinion extends Model
         'reason',
         'topic_id'
     ];
+
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
 }
