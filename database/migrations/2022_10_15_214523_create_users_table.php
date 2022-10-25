@@ -17,9 +17,8 @@ return new class extends Migration {
             $table->string('name', 10)->comment('ユーザーネーム');
             $table->string('password', 60)->comment('パスワード');
             $table->string('email', 255)->unique()->comment('メールアドレス');
-            $table->timestamp('created_at')->useCurrent()->comment('作成日時');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('更新日時');
-            $table->timestamp('deleted_at')->nullable()->comment('削除日時');
+            $table->timestamps();
+            $table->softDeletes();
             $table->comment('ユーザー');
         });
     }

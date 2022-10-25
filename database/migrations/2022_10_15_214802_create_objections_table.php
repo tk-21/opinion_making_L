@@ -15,10 +15,9 @@ return new class extends Migration {
         Schema::create('objections', function (Blueprint $table) {
             $table->id()->comment('反論ID');
             $table->text('body')->comment('反論本文');
-            $table->integer('topic_id')->comment('トピックID');
-            $table->timestamp('created_at')->useCurrent()->comment('作成日時');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('更新日時');
-            $table->timestamp('deleted_at')->nullable()->comment('削除日時');
+            $table->foreignId('topic_id')->comment('トピックID');
+            $table->timestamps();
+            $table->softDeletes();
             $table->comment('反論');
         });
     }

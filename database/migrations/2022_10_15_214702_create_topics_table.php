@@ -18,11 +18,10 @@ return new class extends Migration {
             $table->text('body')->comment('トピック本文');
             $table->text('position')->comment('トピックに対して自らがとるポジション');
             $table->boolean('status')->default(false)->comment('完了フラグ（1:完了　0:未完了）');
-            $table->integer('category_id')->nullable()->comment('カテゴリーID');
-            $table->integer('user_id')->comment('作成したユーザーID');
-            $table->timestamp('created_at')->useCurrent()->comment('作成日時');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('更新日時');
-            $table->timestamp('deleted_at')->nullable()->comment('削除日時');
+            $table->foreignId('category_id')->nullable()->comment('カテゴリーID');
+            $table->foreignId('user_id')->comment('作成したユーザーID');
+            $table->timestamps();
+            $table->softDeletes();
             $table->comment('トピック');
         });
     }
