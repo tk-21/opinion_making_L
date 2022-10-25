@@ -51,8 +51,9 @@ $(".home-topic-status").change(function () {
     };
 
     $.ajax({
-        url: url + "/update_status",
+        url: url + "/status",
         type: "post",
+        dataType: "json",
         data: data,
     }).then(
         //成功したとき

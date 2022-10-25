@@ -65,7 +65,7 @@ Route::middleware('auth')
                 Route::put('/{topic}', 'update')->name('update');
                 Route::get('/delete/{topic}', 'confirmDelete')->name('confirmDelete');
                 Route::delete('/{topic}', 'destroy')->name('destroy');
-                Route::post('/status/{topic}', 'updateStatus')->name('updateStatus');
+                Route::post('/status', 'updateStatus')->name('updateStatus');
             });
 
 

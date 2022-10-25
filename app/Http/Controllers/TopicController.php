@@ -88,18 +88,17 @@ class TopicController extends Controller
 //    完了、未完了を切り替える
     public function updateStatus(Request $request)
     {
+        dd($request);
         $topic = Topic::findOrFail($request->topic_id);
 
         // 反転させる
-        $topic->status = ($topic_status == '完了') ? '0' : '1';
+        $status = $request->topic_status == '完了' ? '0' : '1';
 
-        $topic->update([
-            'status' => $request->topic_status
+        $result = $topic->update([
+            'status' => $status
         ]);
 
-        $is_success = TopicQuery::updateStatus($topic);
-
-        echo $is_success;
+        return response()->json(['result' => $result]);
     }
 
 }
