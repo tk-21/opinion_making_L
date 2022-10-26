@@ -11,6 +11,8 @@ use App\Models\Opinion;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class TopicController extends Controller
 {
@@ -91,15 +93,13 @@ class TopicController extends Controller
         $topic = Topic::findOrFail($request->topic_id);
 
         // 反転させる
-        $topic->status = ($topic_status == '完了') ? '0' : '1';
+        $status = $request->topic_status == '完了' ? '0' : '1';
 
-        $topic->update([
-            'status' => $request->topic_status
+        $result = $topic->update([
+            'status' => $status
         ]);
 
-        $is_success = TopicQuery::updateStatus($topic);
-
-        echo $is_success;
+        return Response::json($result);
     }
 
 }

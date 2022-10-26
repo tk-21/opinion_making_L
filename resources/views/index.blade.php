@@ -26,7 +26,7 @@
                                 <div class="home-topic-wrapper">
                                     <label>
                                         完了チェック
-                                        <input type="checkbox" class="home-topic-status" name="complete_flg"
+                                        <input type="checkbox" class="home-topic-status" name="status"
                                                data-id="{{ $topic->id }}"
                                                @if ($topic->status) checked @endif>
                                         <span class="dummy-checkbox"></span>
