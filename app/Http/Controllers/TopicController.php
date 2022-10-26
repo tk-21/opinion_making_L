@@ -11,6 +11,8 @@ use App\Models\Opinion;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class TopicController extends Controller
 {
@@ -88,7 +90,6 @@ class TopicController extends Controller
 //    完了、未完了を切り替える
     public function updateStatus(Request $request)
     {
-        dd($request);
         $topic = Topic::findOrFail($request->topic_id);
 
         // 反転させる
@@ -98,7 +99,7 @@ class TopicController extends Controller
             'status' => $status
         ]);
 
-        return response()->json(['result' => $result]);
+        return Response::json($result);
     }
 
 }

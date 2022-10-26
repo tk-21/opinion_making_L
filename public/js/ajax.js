@@ -39,9 +39,6 @@ $(".objection-delete").on("click", function () {
 
 // トピックのステータス変更
 $(".home-topic-status").change(function () {
-    let uri = new URL(window.location.href);
-    let url = uri.origin;
-
     let topic_id = $(this).data("id");
     let topic_status = $(this).parent().next().children().children("p").text();
 
@@ -51,8 +48,9 @@ $(".home-topic-status").change(function () {
     };
 
     $.ajax({
-        url: url + "/status",
+        url: 'topics/status',
         type: "post",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         dataType: "json",
         data: data,
     }).then(
@@ -97,13 +95,16 @@ $(".home-topic-status").change(function () {
             } else {
                 //更新に失敗
                 console.log("ステータス更新に失敗しました。");
-                alert("ステータス更新に失敗しました。.");
+                alert("ステータス更新に失敗しました。");
             }
         }.bind(this), //thisを束縛
         //失敗したとき
-        function () {
+        function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("ステータス更新に失敗しました。");
-            alert("ステータス更新に失敗しました。");
+            console.log(XMLHttpRequest.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+            alert("ステータス更新に失敗。");
         }
     );
 });
