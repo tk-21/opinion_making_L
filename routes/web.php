@@ -91,7 +91,7 @@ Route::middleware('auth')
                 Route::post('/', 'store')->name('store');
                 Route::get('/{objection}', 'edit')->name('edit');
                 Route::put('/{objection}', 'update')->name('update');
-                Route::delete('/{objection}', 'destroy')->name('destroy');
+                Route::delete('/delete', 'destroy')->name('destroy');
             });
 
 

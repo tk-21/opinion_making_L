@@ -7,16 +7,17 @@ $(".objection-delete").on("click", function () {
         let delete_type = $(this).data("type");
 
         if (delete_type === "objection") {
-            url = "objections/" + delete_id;
+            url = "/objections/delete";
         }
 
         if (delete_type === "counterObjection") {
-            url = "counter_objections/" + delete_id;
+            url = "/counter_objections/delete";
         }
 
         let data = {
             delete_id: delete_id,
             delete_type: delete_type,
+            '_method': 'delete'
         };
 
         $.ajax({
@@ -31,6 +32,7 @@ $(".objection-delete").on("click", function () {
                 if (data) {
                     // クリックした要素の親要素を削除
                     $(this).parent().parent().remove();
+                    alert("削除しました。");
                 } else {
                     //削除に失敗
                     console.log("削除に失敗しました。");
@@ -49,6 +51,7 @@ $(".objection-delete").on("click", function () {
     }
 });
 
+
 // トピックのステータス変更
 $(".home-topic-status").change(function () {
     let topic_id = $(this).data("id");
@@ -60,7 +63,7 @@ $(".home-topic-status").change(function () {
     };
 
     $.ajax({
-        url: 'topics/status',
+        url: '/topics/status',
         type: "post",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         dataType: "json",

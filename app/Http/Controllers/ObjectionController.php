@@ -154,8 +154,9 @@ class ObjectionController extends Controller
 
 
 //    反論を非同期通信で削除する
-    public function destroy(Objection $objection)
+    public function destroy(Request $request)
     {
+        $objection = Objection::findOrFail($request->delete_id);
         $result = $objection->delete();
         return Response::json($result);
     }
