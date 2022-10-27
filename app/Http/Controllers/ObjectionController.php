@@ -50,58 +50,10 @@ class ObjectionController extends Controller
     }
 
 
-//    「反論」または「反論への反論」編集画面を表示
-    public function edit($id)
+//    反論編集画面を表示
+    public function edit(Objection $objection)
     {
-        $type = get_param('type', null, false);
-
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点でデータを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $objection = ObjectionModel::getSessionAndFlush();
-
-        // データが取れてくれば、その値を画面表示し、処理を終了
-        if (!empty($objection)) {
-            \view\objection_edit\index($objection, $type);
-            return;
-        }
-
-        // データが取れてこなかった場合、TopicModelのインスタンスを作成して初期化
-        $objection = new ObjectionModel;
-
-        // GETリクエストから取得したidをモデルに格納
-        $objection->id = get_param('id', null, false);
-
-        // バリデーションが失敗した場合は、画面遷移させない
-        $validation = new ObjectionValidation($objection);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        if ($type === 'objection') {
-            // idから反論を取ってくる
-            $fetchedObjection = ObjectionQuery::fetchById($valid_data);
-        } elseif ($type === 'counterObjection') {
-            // idから反論を取ってくる
-            $fetchedObjection = counterObjectionQuery::fetchById($valid_data);
-        } else {
-            redirect(GO_REFERER);
-        }
-
-        // トピックが取れてこなかったら４０４ページへリダイレクト
-        if (!$fetchedObjection) {
-            redirect('404');
-            return;
-        }
-
-        // 取れてきた反論を渡してviewのindexを表示
-        \view\objection_edit\index($fetchedObjection, $type);
-
-        return;
-
+        return view('objections.edit', ['objection' => $objection]);
     }
 
 
