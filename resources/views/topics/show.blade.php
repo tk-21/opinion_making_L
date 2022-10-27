@@ -5,7 +5,7 @@
         $status = $topic->status ? '完了' : '未完了';
 
         // カテゴリーが削除されていれば未選択にする
-        $category_name = empty($topic->category->deleted_at) ? '未選択' : $topic->category->name;
+        $category_name = empty($topic->category->deleted_at) ? $topic->category->name : '未選択';
 //        $is_edit = $opinion ? 'edit' : 'create';
     @endphp
 
