@@ -24,7 +24,8 @@ class StoreObjectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'body' => ['required']
+            'body' => ['required'],
+            'topic_id' => ['required', 'numeric'],
         ];
     }
 }

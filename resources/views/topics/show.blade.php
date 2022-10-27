@@ -35,11 +35,12 @@
                     <div class="objection">
                         <p class="objection-ttl">意見に対する反論</p>
 
-                        <form class="objection-form validate-form" action="" method="post">
+                        <form class="objection-form validate-form" action="{{ route('objections.store') }}"
+                              method="post">
+                            @csrf
                             <input type="hidden" id="topic_id" name="topic_id" value="{{ $topic->id }}">
-                            <input type="hidden" id="form_type" name="form_type" value="create_objection">
                             <textarea id="objection" class="objection-textarea input validate-target" name="body"
-                                      required></textarea>
+                                      required>{{ old('body') }}</textarea>
                             <button type="submit" id="objection_register" class="register-btn">登録</button>
                         </form>
 

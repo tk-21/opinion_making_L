@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Store\StoreObjectionRequest;
+use App\Models\Objection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ObjectionController extends Controller
 {
@@ -28,45 +30,12 @@ class ObjectionController extends Controller
     }
 
 
-//    「反論」または「反論への反論」を登録する
+//    反論を登録する
     public function store(StoreObjectionRequest $request)
     {
-
-
-        $objection = new ObjectionModel;
-
-        // postで飛んできた値をオブジェクトに格納する
-        $objection->body = get_param('body', null);
-        $objection->topic_id = get_param('topic_id', null);
-
-        try {
-            $validation = new ObjectionValidation($objection);
-
-            if (!$validation->validateBody()) {
-                Msg::push(Msg::ERROR, '反論の登録に失敗しました。');
-                redirect(GO_REFERER);
-            }
-
-            $valid_data = $validation->getValidData();
-
-            $formType = get_param('form_type', null);
-
-            // 「意見に対する反論」の場合の登録処理
-            if ($formType === 'create_objection') {
-                ObjectionQuery::insert($valid_data);
-            }
-
-            // 「反論への反論」の場合の登録処理
-            if ($formType === 'create_counterObjection') {
-                CounterObjectionQuery::insert($valid_data);
-            }
-        } catch (Exception $e) {
-            Msg::push(Msg::DEBUG, $e->getMessage());
-        }
-
-        // 処理が終了したら画面を移動させる
-        redirect(GO_REFERER);
-
+        $validated = $request->validated();
+        Objection::create($validated);
+        return back()->with('info', '反論を登録しました。');
     }
 
     /**
@@ -184,24 +153,10 @@ class ObjectionController extends Controller
     }
 
 
-//    「反論」または「反論への反論」を非同期通信で削除する
-    public function destroy($id)
+//    反論を非同期通信で削除する
+    public function destroy(Objection $objection)
     {
-        // 削除する項目のタイプとidを取得
-        $delete_type = get_param('delete_type', null);
-        $delete_id = get_param('delete_id', null);
-
-        if ($delete_type === 'objection') {
-            $is_success = ObjectionQuery::delete($delete_id);
-            echo json_encode($is_success);
-            return;
-        }
-
-        if ($delete_type === 'counterObjection') {
-            $is_success = CounterObjectionQuery::delete($delete_id);
-            echo json_encode($is_success);
-            return;
-        }
-
+        $result = $objection->delete();
+        return Response::json($result);
     }
 }
