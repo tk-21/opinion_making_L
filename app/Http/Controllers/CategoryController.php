@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
 //    カテゴリー一覧表示
     public function index()
     {
+        Auth::id();
         // ユーザーに紐付くカテゴリーを取得
         $categories = CategoryQuery::fetchByUserId($user);
 
