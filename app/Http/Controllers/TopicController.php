@@ -68,7 +68,7 @@ class TopicController extends Controller
     {
         $updateData = $request->validated();
         $topic->update($updateData);
-        return to_route('topics.show', $topic->id)->with('info', 'トピックを更新しました。');
+        return to_route('topics.show', ['topic' => $topic])->with('info', 'トピックを更新しました。');
     }
 
 
