@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Store\StoreCategoryRequest;
+use App\Models\Category;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,10 +13,8 @@ class CategoryController extends Controller
 //    カテゴリー一覧表示
     public function index()
     {
-        Auth::id();
-        // ユーザーに紐付くカテゴリーを取得
-        $categories = CategoryQuery::fetchByUserId($user);
-
+        $user_id = Auth::id();
+        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
     }
 
     /**
@@ -28,61 +29,21 @@ class CategoryController extends Controller
 
 
 //    カテゴリー作成
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $user = UserModel::getSession();
-
-        $category = new CategoryModel;
-
-        $category->user_id = $user->id;
-        $category->name = get_param('name', null);
-
-        try {
-            $validation = new CategoryValidation($category);
-
-            if (!$validation->validateName()) {
-                Msg::push(Msg::ERROR, 'カテゴリーの作成に失敗しました。');
-                CategoryModel::setSession($category);
-                redirect(GO_REFERER);
-            }
-
-            $valid_data = $validation->getValidData();
-
-            CategoryQuery::insert($valid_data) ? Msg::push(Msg::INFO, 'カテゴリーを作成しました。') : Msg::push(Msg::ERROR, 'カテゴリーの作成に失敗しました。');
-
-            redirect(GO_HOME);
-        } catch (Exception $e) {
-            Msg::push(Msg::ERROR, $e->getMessage());
-        }
-
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+        Category::create($validated);
+        return to_route('index')->with('info', 'カテゴリーを作成しました。');
     }
 
 
     // カテゴリーに紐付くトピックスを表示する
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = new CategoryModel;
-
-        $category->id = get_param('id', null, false);
-
-        $validation = new CategoryValidation($category);
-
-        if (!$validation->validateId()) {
-            redirect(GO_REFERER);
-        };
-
-        $valid_data = $validation->getValidData();
-
-        $fetchedCategory = CategoryQuery::fetchById($valid_data);
-
-        // ページング機能に必要な要素を取得
-        [$topic_num, $max_page, $current_page, $range, $topics] = TopicQuery::getTopicsByCategoryId($fetchedCategory);
-
-        // ユーザーに紐付くカテゴリー一覧を取得
-        $user = UserModel::getSession();
-        $categories = CategoryQuery::fetchByUserId($user);
-
-        \view\home\index($topic_num, $max_page, $current_page, $range, $topics, $categories, false, $fetchedCategory);
+        $topics = Topic::where('category_id', $category->id)->orderBy('created_at', 'asc')->get();
+        $categories = Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        return view('categories.index', compact('category', 'topics', 'categories'));
     }
 
 
