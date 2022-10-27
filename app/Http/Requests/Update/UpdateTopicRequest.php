@@ -28,6 +28,7 @@ class UpdateTopicRequest extends FormRequest
             'title' => ['required'],
             'body' => ['required'],
             'position' => ['required'],
+            'category_id' => ['required', 'numeric'],
         ];
     }
 }

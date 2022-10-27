@@ -96,15 +96,18 @@
                 <li class="home-category">
                     <p class="home-category-ttl">カテゴリー</p>
 
-                    <form class="home-category-form validate-form" action="" method="post">
-                        <textarea class="home-category-textarea input validate-target" name="name" required></textarea>
+                    <form class="home-category-form validate-form" action="{{ route('categories.store') }}"
+                          method="post">
+                        @csrf
+                        <textarea class="home-category-textarea input validate-target" name="name"
+                                  required>{{ old('name') }}</textarea>
                         <button type="submit" class="category-btn">作成</button>
                     </form>
 
                     <ul class="home-category-list">
                         @foreach ($categories as $category)
                             <li class="home-category-item">
-                                <a href="{{ route('categories.show', ['category' => $category->id]) }}">
+                                <a href="{{ route('categories.show', ['category' => $category]) }}">
                                     {{ $category->name }}
                                 </a>
                             </li>
