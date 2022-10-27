@@ -91,7 +91,19 @@ Route::middleware('auth')
                 Route::post('/', 'store')->name('store');
                 Route::get('/{objection}', 'edit')->name('edit');
                 Route::put('/{objection}', 'update')->name('update');
-                Route::delete('/{objection}', 'destroy')->name('destroy');
+                Route::delete('/delete', 'destroy')->name('destroy');
+            });
+
+
+//反論への反論
+        Route::prefix('/counter_objections')
+            ->controller(CounterObjectionController::class)
+            ->name('counter_objections.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{counter_objection}', 'edit')->name('edit');
+                Route::put('/{counter_objection}', 'update')->name('update');
+                Route::delete('/{counter_objection}', 'destroy')->name('destroy');
             });
 
 

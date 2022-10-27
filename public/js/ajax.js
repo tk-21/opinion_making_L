@@ -1,20 +1,30 @@
 // 反論削除
 $(".objection-delete").on("click", function () {
-    if (confirm("削除してもよろしいですか？")) {
-        let uri = new URL(window.location.href);
-        let url = uri.origin;
+    let url;
 
+    if (confirm("削除してもよろしいですか？")) {
         let delete_id = $(this).data("id");
         let delete_type = $(this).data("type");
+
+        if (delete_type === "objection") {
+            url = "/objections/delete";
+        }
+
+        if (delete_type === "counterObjection") {
+            url = "/counter_objections/delete";
+        }
 
         let data = {
             delete_id: delete_id,
             delete_type: delete_type,
+            '_method': 'delete'
         };
 
         $.ajax({
-            url: url + "/objection_delete",
+            url: url,
             type: "post",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            dataType: "json",
             data: data,
         }).then(
             //成功したとき
@@ -22,6 +32,7 @@ $(".objection-delete").on("click", function () {
                 if (data) {
                     // クリックした要素の親要素を削除
                     $(this).parent().parent().remove();
+                    alert("削除しました。");
                 } else {
                     //削除に失敗
                     console.log("削除に失敗しました。");
@@ -29,13 +40,17 @@ $(".objection-delete").on("click", function () {
                 }
             }.bind(this), //thisを束縛
             //失敗したとき
-            function () {
+            function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("削除に失敗しました。");
+                console.log(XMLHttpRequest.status);
+                console.log(textStatus);
+                console.log(errorThrown);
                 alert("削除に失敗しました。");
             }
         );
     }
 });
+
 
 // トピックのステータス変更
 $(".home-topic-status").change(function () {
@@ -48,7 +63,7 @@ $(".home-topic-status").change(function () {
     };
 
     $.ajax({
-        url: 'topics/status',
+        url: '/topics/status',
         type: "post",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         dataType: "json",
