@@ -95,6 +95,18 @@ Route::middleware('auth')
             });
 
 
+//反論への反論
+        Route::prefix('/counter_objections')
+            ->controller(CounterObjectionController::class)
+            ->name('counter_objections.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::get('/{counter_objection}', 'edit')->name('edit');
+                Route::put('/{counter_objection}', 'update')->name('update');
+                Route::delete('/{counter_objection}', 'destroy')->name('destroy');
+            });
+
+
 //意見
         Route::prefix('/opinions')
             ->controller(OpinionController::class)

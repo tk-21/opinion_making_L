@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Store\StoreObjectionRequest;
 use Illuminate\Http\Request;
 
 class ObjectionController extends Controller
@@ -28,8 +29,10 @@ class ObjectionController extends Controller
 
 
 //    「反論」または「反論への反論」を登録する
-    public function store(Request $request)
+    public function store(StoreObjectionRequest $request)
     {
+
+
         $objection = new ObjectionModel;
 
         // postで飛んできた値をオブジェクトに格納する
