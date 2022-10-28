@@ -1,9 +1,9 @@
 @extends('layouts.default')
 @section('content')
 
-    {{--
+    @php
         $label = $type == 'objection' ? '反論の編集' : '反論への反論の編集';
-    --}}
+    @endphp
 
     <section class="edit">
         <div class="edit-inner">
@@ -14,7 +14,7 @@
 
                 <dl class="edit-list">
 
-                    <dt class="edit-dttl"><label for="body" onclick=""><?php echo $label; ?></label></dt>
+                    <dt class="edit-dttl"><label for="body" onclick="">{{ $label }}</label></dt>
                     <dd class="edit-item">
                         <textarea id="body" name="body" class="edit-body input validate-target" autofocus
                                   required>{{ old('body', $objection->body) }}</textarea>
