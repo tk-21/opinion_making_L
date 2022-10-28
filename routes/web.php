@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CounterObjectionController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\PasswordResetController;
@@ -98,12 +99,12 @@ Route::middleware('auth')
 //反論への反論
         Route::prefix('/counter_objections')
             ->controller(CounterObjectionController::class)
-            ->name('counter_objections.')
+            ->name('counterObjections.')
             ->group(function () {
                 Route::post('/', 'store')->name('store');
-                Route::get('/{counter_objection}', 'edit')->name('edit');
-                Route::put('/{counter_objection}', 'update')->name('update');
-                Route::delete('/{counter_objection}', 'destroy')->name('destroy');
+                Route::get('/{counterObjection}', 'edit')->name('edit');
+                Route::put('/{counterObjection}', 'update')->name('update');
+                Route::delete('/{counterObjection}', 'destroy')->name('destroy');
             });
 
 
