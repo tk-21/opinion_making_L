@@ -54,7 +54,7 @@ class ObjectionController extends Controller
 //    反論編集画面を表示
     public function edit(Objection $objection)
     {
-        return view('objections.edit', ['objection' => $objection, 'type' => 'objection']);
+        return view('objections.edit', ['objection' => $objection]);
     }
 
 
