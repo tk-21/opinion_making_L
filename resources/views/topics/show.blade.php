@@ -2,13 +2,9 @@
 @section('content')
 
     @php
-        $status = $topic->status ? '完了' : '未完了';
-
-        // カテゴリーが削除されていれば未選択にする
-        $category_name = empty($topic->category->deleted_at) ? $topic->category->name : '未選択';
-
         $is_edit = $opinion ? '編集' : '作成';
-        $url = $opinion ? "route('opinions.create', ['topic' => $topic])" : "route('opinions.edit', ['opinion' => $opinion])";
+        $route_name = $opinion ? 'opinions.edit' : 'opinions.create';
+        $param = $opinion ? compact('opinion') : compact('topic');
     @endphp
 
     <section class="detail">
@@ -24,9 +20,9 @@
                         <dt class="detail-topic-ttl">ポジション</dt>
                         <dd class="detail-topic-data">{{ $topic->position }}</dd>
                         <dt class="detail-topic-ttl">ステータス</dt>
-                        <dd class="detail-topic-data">{{ $status }}</dd>
+                        <dd class="detail-topic-data">{{ $topic->status ? '完了' : '未完了' }}</dd>
                         <dt class="detail-topic-ttl">カテゴリー</dt>
-                        <dd class="detail-topic-data">{{ $category_name }}</dd>
+                        <dd class="detail-topic-data">{{ $topic->category->name ?? '未選択' }}</dd>
                     </dl>
 
                     <a class="edit-btn" href="{{ route('topics.edit', ['topic' => $topic]) }}">編集</a>
@@ -120,7 +116,7 @@
                 <dd class="detail-opinion-data">{{ $opinion->opinion ?? '' }}</dd>
                 <dt class="detail-opinion-ttl">その理由：</dt>
                 <dd class="detail-opinion-data">{{ $opinion->reason ?? '' }}</dd>
-                <a class="edit-btn" href="{{ $url }}">{{ $is_edit }}</a>
+                <a class="edit-btn" href="{{ route($route_name, $param) }}">{{ $is_edit }}</a>
             </dl>
 
             <a class="back-btn _home" href="{{ route('index') }}">トピック一覧に戻る</a>

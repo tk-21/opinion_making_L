@@ -28,7 +28,7 @@
 
                 <button type="submit" class="register-btn">登録</button>
 
-                <a class="back-btn _back" href="{{ route('topics.show', ['topic' => $topic]) }}">戻る</a>
+                <a class="back-btn _back" href="{{ route('topics.show', ['topic' => $topic->id]) }}">戻る</a>
 
             </form>
         </div>
