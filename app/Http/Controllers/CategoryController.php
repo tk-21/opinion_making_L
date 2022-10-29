@@ -42,7 +42,7 @@ class CategoryController extends Controller
     // カテゴリーに紐付くトピックスを表示する
     public function show(Category $category)
     {
-        $topics = Topic::where('category_id', $category->id)->orderBy('created_at', 'asc')->get();
+        $topics = Topic::where('category_id', $category->id)->orderBy('created_at', 'desc')->paginate(5);
         $categories = Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         return view('categories.index', compact('category', 'topics', 'categories'));
     }
