@@ -14,8 +14,8 @@ class CategoryController extends Controller
 //    カテゴリー一覧表示
     public function index()
     {
-        $user_id = Auth::id();
-        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+//        $user_id = Auth::id();
+//        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
     }
 
     /**

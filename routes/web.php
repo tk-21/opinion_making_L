@@ -113,7 +113,7 @@ Route::middleware('auth')
             ->controller(OpinionController::class)
             ->name('opinions.')
             ->group(function () {
-                Route::get('/create', 'create')->name('create');
+                Route::get('/create/{topic}', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
                 Route::get('/{opinion}', 'edit')->name('edit');
                 Route::put('/{opinion}', 'update')->name('update');
