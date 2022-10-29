@@ -6,7 +6,9 @@
 
         // カテゴリーが削除されていれば未選択にする
         $category_name = empty($topic->category->deleted_at) ? $topic->category->name : '未選択';
-//        $is_edit = $opinion ? 'edit' : 'create';
+
+        $is_edit = $opinion ? '編集' : '作成';
+        $url = $opinion ? "route('opinions.create', ['topic' => $topic])" : "route('opinions.edit', ['opinion' => $opinion])";
     @endphp
 
     <section class="detail">
@@ -118,7 +120,7 @@
                 <dd class="detail-opinion-data">{{ $opinion->opinion ?? '' }}</dd>
                 <dt class="detail-opinion-ttl">その理由：</dt>
                 <dd class="detail-opinion-data">{{ $opinion->reason ?? '' }}</dd>
-                <a class="edit-btn" href="{{ route('opinions.create', ['topic' => $topic]) }}">編集</a>
+                <a class="edit-btn" href="{{ $url }}">{{ $is_edit }}</a>
             </dl>
 
             <a class="back-btn _home" href="{{ route('index') }}">トピック一覧に戻る</a>

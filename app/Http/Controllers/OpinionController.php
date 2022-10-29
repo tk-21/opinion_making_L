@@ -48,38 +48,9 @@ class OpinionController extends Controller
 
 
 //    意見の編集画面を表示
-    public function edit($id)
+    public function edit(Opinion $opinion)
     {
-        $topic = new TopicModel;
-
-        $topic->id = get_param('id', null, false);
-
-        // idからトピックの内容を取ってくる
-        $fetchedTopic = TopicQuery::fetchById($topic);
-
-        // トピックが取れてこなかったら４０４ページへリダイレクト
-        if (!$fetchedTopic) {
-            redirect('404');
-            return;
-        }
-
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点でデータを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $opinion = OpinionModel::getSessionAndFlush();
-
-        // データが取れてくれば、その値を画面表示し、処理を終了
-        if (!empty($opinion)) {
-            \view\opinion\index($opinion, $topic, false);
-            return;
-        }
-
-        // idからトピックの内容を取ってくる
-        $fetchedOpinion = OpinionQuery::fetchByTopicId($topic);
-
-        // トピックを渡してviewのindexを表示
-        \view\opinion\index($fetchedOpinion, $topic, false);
-
+        return view('opinions.edit', ['opinion' => $opinion]);
     }
 
 
