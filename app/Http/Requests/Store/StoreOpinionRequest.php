@@ -25,7 +25,8 @@ class StoreOpinionRequest extends FormRequest
     {
         return [
             'opinion' => ['required'],
-            'reason' => ['required']
+            'reason' => ['required'],
+            'topic_id' => ['required', 'numeric'],
         ];
     }
 }

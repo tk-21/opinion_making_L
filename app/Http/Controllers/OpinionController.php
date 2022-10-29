@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Store\StoreOpinionRequest;
+use App\Models\Opinion;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class OpinionController extends Controller
@@ -16,66 +19,20 @@ class OpinionController extends Controller
         //
     }
 
-    
+
 //    意見作成画面を表示
-    public function create()
+    public function create(Topic $topic)
     {
-        $topic = new TopicModel;
-
-        $topic->id = get_param('id', null, false);
-
-        $fetchedTopic = TopicQuery::fetchById($topic);
-
-        // トピックが取れてこなかったら４０４ページへリダイレクト
-        if (!$fetchedTopic) {
-            redirect('404');
-            return;
-        }
-
-        // バリデーションに引っかかって登録に失敗した場合の処理
-        // セッションに保存しておいた値を取ってきて変数に格納する。セッション上のデータは削除する
-        // 必ずデータを取得した時点でデータを削除しておく必要がある。そうしないと他の記事を選択したときに出てきてしまう。
-        $opinion = OpinionModel::getSessionAndFlush();
-
-        if (empty($opinion)) {
-            $opinion = new OpinionModel;
-        }
-
-        \view\opinion\index($opinion, $topic, true);
-
+        return view('opinions.create', ['topic' => $topic]);
     }
 
 
 //    意見の登録処理
-    public function store(Request $request)
+    public function store(StoreOpinionRequest $request)
     {
-        $opinion = new OpinionModel;
-
-        $opinion->opinion = get_param('opinion', null);
-        $opinion->reason = get_param('reason', null);
-        $opinion->topic_id = get_param('id', null, false);
-
-
-        try {
-            $validation = new OpinionValidation($opinion);
-
-            if (!$validation->checkCreate()) {
-                Msg::push(Msg::ERROR, '意見の登録に失敗しました。');
-
-                OpinionModel::setSession($opinion);
-
-                redirect(GO_REFERER);
-            }
-
-            $valid_data = $validation->getValidData();
-
-            OpinionQuery::insert($valid_data) ? Msg::push(Msg::INFO, '意見を登録しました。') : Msg::push(Msg::ERROR, '登録に失敗しました。');
-
-            redirect(sprintf('detail?id=%s', $opinion->topic_id));
-        } catch (Exception $e) {
-            Msg::push(Msg::ERROR, $e->getMessage());
-        }
-
+        $validated = $request->validated();
+        Opinion::create($validated);
+        return to_route('topics.show', ['topic' => $validated['topic_id']])->with('info', '意見を作成しました。');
     }
 
     /**

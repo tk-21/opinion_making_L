@@ -3,7 +3,9 @@
 
     <section class="opinion">
         <div class="inner">
-            <form class="opinion-form validate-form" action="" method="POST" novalidate>
+            <form class="opinion-form validate-form" action="{{ route('opinions.store') }}"
+                  method="POST" novalidate>
+                @csrf
                 <input type="hidden" id="topic_id" name="topic_id" value="{{ $topic->id }}">
 
                 <h2 class="opinion-ttl">最終意見の言語化</h2>
@@ -26,7 +28,7 @@
 
                 <button type="submit" class="register-btn">登録</button>
 
-                <a class="back-btn _back" href="<?php the_url(sprintf('detail?id=%d', $topic->id)); ?>">戻る</a>
+                <a class="back-btn _back" href="{{ route('topics.show', ['topic' => $topic]) }}">戻る</a>
 
             </form>
         </div>
