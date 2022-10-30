@@ -24,7 +24,6 @@ class UpdateOpinionRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:opinions,id', 'numeric'],
             'opinion' => ['required'],
             'reason' => ['required']
         ];

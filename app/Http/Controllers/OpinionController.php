@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Store\StoreOpinionRequest;
+use App\Http\Requests\Update\UpdateOpinionRequest;
 use App\Models\Opinion;
 use App\Models\Topic;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class OpinionController extends Controller
         return to_route('topics.show', ['topic' => $validated['topic_id']])->with('info', '意見を作成しました。');
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -55,34 +57,13 @@ class OpinionController extends Controller
 
 
 //    意見の更新処理
-    public function update(Request $request, $id)
+    public function update(UpdateOpinionRequest $request, Opinion $opinion)
     {
-        $opinion = new OpinionModel;
-
-        $opinion->id = get_param('id', null);
-        $opinion->opinion = get_param('opinion', null);
-        $opinion->reason = get_param('reason', null);
-        $opinion->topic_id = get_param('id', null, false);
-
-        try {
-            $validation = new OpinionValidation($opinion);
-
-            if (!$validation->checkEdit()) {
-                Msg::push(Msg::ERROR, '意見の更新に失敗しました。');
-                OpinionModel::setSession($opinion);
-                redirect(GO_REFERER);
-            }
-
-            $valid_data = $validation->getValidData();
-
-            OpinionQuery::update($valid_data) ? Msg::push(Msg::INFO, '意見を更新しました。') : Msg::push(Msg::ERROR, '更新に失敗しました。');
-
-            redirect(sprintf('detail?id=%s', $opinion->topic_id));
-        } catch (Exception $e) {
-            Msg::push(Msg::ERROR, $e->getMessage());
-        }
-
+        $updateData = $request->validated();
+        $opinion->update($updateData);
+        return to_route('topics.show', ['topic' => $opinion->topic_id])->with('info', '意見を更新しました。');
     }
+
 
     /**
      * Remove the specified resource from storage.

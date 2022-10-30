@@ -20,7 +20,7 @@ class TopicController extends Controller
     public function index()
     {
         $user_id = Auth::id();
-        $topics = Topic::where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(10);
+        $topics = Topic::where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(5);
         $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         return view('index', compact('topics', 'categories'));
     }

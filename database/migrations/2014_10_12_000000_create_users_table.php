@@ -14,9 +14,11 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->comment('ユーザーID');
-            $table->string('name', 10)->comment('ユーザーネーム');
-            $table->string('password', 60)->comment('パスワード');
-            $table->string('email', 255)->unique()->comment('メールアドレス');
+            $table->string('name')->comment('ユーザーネーム');
+            $table->string('email')->unique()->comment('メールアドレス');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->comment('パスワード');
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
             $table->comment('ユーザー');
