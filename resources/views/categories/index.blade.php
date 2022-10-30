@@ -69,15 +69,15 @@
 
                                     {{--                                ページ番号--}}
                                     @foreach($topics->getUrlRange($topics->currentPage()-3, $topics->currentPage()+3) as $page=>$link)
-                                        <li class="paging-item">
-                                            @if($page >= 1 && $page <= $topics->lastPage())
+                                        @if($page >= 1 && $page <= $topics->lastPage())
+                                            <li class="paging-item">
                                                 @if($page === $topics->currentPage())
                                                     <span class="paging-now">{{ $page }}</span>
                                                 @else
                                                     <a href="{{ $link }}" class="paging-num">{{ $page }}</a>
                                                 @endif
-                                            @endif
-                                        </li>
+                                            </li>
+                                        @endif
                                     @endforeach
 
                                     {{--                                次へ進むボタン--}}
