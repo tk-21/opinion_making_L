@@ -55,7 +55,7 @@ class CounterObjectionController extends Controller
 //    反論への反論編集画面を表示
     public function edit(CounterObjection $counterObjection)
     {
-        return view('counterObjections.edit', ['counterObjection' => $counterObjection]);
+        return view('counter_objections.edit', ['counterObjection' => $counterObjection]);
     }
 
 

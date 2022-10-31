@@ -4,7 +4,7 @@
     <section class="edit">
         <div class="edit-inner">
             <form class="edit-form validate-form"
-                  action="{{ route('counterObjections.update', ['counterObjection' => $counterObjection]) }}"
+                  action="{{ route('counter_objections.update', ['counterObjection' => $counterObjection]) }}"
                   method="POST" novalidate>
                 @csrf
                 @method('PUT')

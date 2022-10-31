@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option controls the default authentication "guard" and password
-    | reset options for your application. You may change these defaults
+    | reset_password options for your application. You may change these defaults
     | as required, but they're a perfect start for most applications.
     |
     */
@@ -76,11 +76,11 @@ return [
     | Resetting Passwords
     |--------------------------------------------------------------------------
     |
-    | You may specify multiple password reset configurations if you have more
+    | You may specify multiple password reset_password configurations if you have more
     | than one user table or model in the application and you want to have
-    | separate password reset settings based on the specific user types.
+    | separate password reset_password settings based on the specific user types.
     |
-    | The expire time is the number of minutes that each reset token will be
+    | The expire time is the number of minutes that each reset_password token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |

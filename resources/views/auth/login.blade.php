@@ -27,7 +27,7 @@
                 <button type="submit" class="register-btn auth-btn">ログイン</button>
             </form>
 
-            <a class="back-btn _home" href="{{ route('showRequestForm') }}">パスワードを忘れた方はこちら</a>
+            <a class="back-btn _home" href="{{ route('password_reset.email.form') }}">パスワードを忘れた方はこちら</a>
             <a class="back-btn _home" href="{{ route('register') }}">アカウント登録</a>
 
         </div>

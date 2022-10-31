@@ -73,7 +73,7 @@
                     <div class="objection">
                         <p class="objection-ttl">反論への反論</p>
 
-                        <form class="objection-form validate-form" action="{{ route('counterObjections.store') }}"
+                        <form class="objection-form validate-form" action="{{ route('counter_objections.store') }}"
                               method="post">
                             @csrf
                             <input type="hidden" name="topic_id" value="{{ $topic->id }}">
@@ -95,7 +95,7 @@
 
                                     <div class="objection-btn">
                                         <a class="objection-edit"
-                                           href="{{ route('counterObjections.edit', ['counterObjection' => $counterObjection]) }}"><img
+                                           href="{{ route('counter_objections.edit', ['counterObjection' => $counterObjection]) }}"><img
                                                 src="/img/edit.svg" alt="編集"></a>
 
                                         <button type="submit" class="objection-delete"
