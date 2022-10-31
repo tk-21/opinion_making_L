@@ -37,8 +37,8 @@ Route::controller(PasswordResetController::class)
         Route::get('/request', 'showRequestForm')->name('showRequestForm');
         Route::post('/request', 'request')->name('request');
         Route::get('/request/complete', 'showEmailSent')->name('request.complete');
-        Route::get('/reset', 'showResetForm')->name('showResetForm');
-        Route::post('/reset', 'reset')->name('reset');
+        Route::get('/reset_password', 'showResetForm')->name('showResetForm');
+        Route::post('/reset_password', 'reset')->name('reset_password');
     });
 
 
@@ -99,7 +99,7 @@ Route::middleware('auth')
 //反論への反論
         Route::prefix('/counter_objections')
             ->controller(CounterObjectionController::class)
-            ->name('counterObjections.')
+            ->name('counter_objections.')
             ->group(function () {
                 Route::post('/', 'store')->name('store');
                 Route::get('/{counterObjection}', 'edit')->name('edit');
@@ -117,6 +117,23 @@ Route::middleware('auth')
                 Route::post('/', 'store')->name('store');
                 Route::get('/{opinion}', 'edit')->name('edit');
                 Route::put('/{opinion}', 'update')->name('update');
+            });
+
+
+//パスワードリセット
+        Route::prefix('/password_reset')
+            ->name('password_reset.')
+            ->group(function () {
+                Route::prefix('/email')
+                    ->name('email.')
+                    ->group(function () {
+                        Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form');
+                        Route::post('/', [PasswordController::class, 'sendEmailResetPassword'])->name('send');
+                        Route::get('/send_complete', [PasswordController::class, 'sendComplete'])->name('send_complete');
+                    });
+                Route::get('/edit', [PasswordController::class, 'edit'])->name('edit');
+                Route::post('/update', [PasswordController::class, 'update'])->name('update');
+                Route::get('/edited', [PasswordController::class, 'edited'])->name('edited');
             });
 
     });

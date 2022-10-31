@@ -86,7 +86,7 @@ class PasswordResetController extends Controller
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = sprintf('%s%s?token=%s', BASE_PATH, 'reset', $passwordResetToken);
+        $url = sprintf('%s%s?token=%s', BASE_PATH, 'reset_password', $passwordResetToken);
 
         $subject = 'パスワードリセット用URLをお送りします。';
 
