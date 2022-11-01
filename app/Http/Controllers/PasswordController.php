@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SendEmailRequest;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\UserTokenRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
