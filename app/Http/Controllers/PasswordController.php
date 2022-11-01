@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SendEmailRequest;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\UserTokenRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +15,8 @@ class PasswordController extends Controller
     private $userRepository;
     private $userTokenRepository;
 
-    private const MAIL_SENT_SESSION_KEY = 'user_reset_password_mail_sent_action';
+    private const MAIL_SENT_SESSION_KEY = 'mail_send_action';
+
 
     public function __construct(
         UserRepositoryInterface      $userRepository,
@@ -24,10 +27,12 @@ class PasswordController extends Controller
         $this->userTokenRepository = $userTokenRepository;
     }
 
+
     public function emailFormResetPassword()
     {
         return view('reset_password.email_form');
     }
+
 
     public function sendEmailResetPassword(SendEmailRequest $request)
     {
@@ -45,8 +50,19 @@ class PasswordController extends Controller
             return to_route('password_reset.email.form')->with('error', '処理に失敗しました。時間をおいて再度お試しください。');
         }
 
-        session()->put(self::MAIL_SENT_SESSION_KEY, 'user_reset_password_send_email');
+        session()->put(self::MAIL_SENT_SESSION_KEY, 'mail_sent');
 
         return to_route('password_reset.email.send_complete');
+    }
+
+
+//    パスワードリセットメール送信完了画面表示
+    public function sendComplete()
+    {
+        if (session()->pull(self::MAIL_SENT_SESSION_KEY) !== 'mail_sent') {
+            return to_route('password_reset.email.form')->with('error', '不正なリクエストです。');
+        }
+
+        return view('reset_password.send_complete');
     }
 }
