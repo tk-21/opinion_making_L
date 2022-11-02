@@ -7,7 +7,7 @@
                 <li class="sent-item">メールに記載されているURLからパスワードリセットの手続きを行ってください。</li>
             </ul>
 
-            <a class="back-btn _home" href="<?php the_url('login'); ?>">ログイン画面に戻る</a>
+            <a class="back-btn _home" href="{{ route('login') }}">ログイン画面に戻る</a>
 
         </div>
     </section>

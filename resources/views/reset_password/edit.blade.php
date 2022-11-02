@@ -2,10 +2,11 @@
 @section('content')
     <section class="auth">
         <div class="auth-inner">
-            <form class="auth-form validate-form" action="" method="POST" novalidate>
+            <form class="auth-form validate-form" action="{{ route('password_reset.update') }}" method="POST"
+                  novalidate>
+                @csrf
 
-                <input type="hidden" name="password_reset_token" value="<? echo $passwordResetToken; ?>">
-                <input type="hidden" name="csrf_token" value="<? echo $csrf_token; ?>">
+                <input type="hidden" name="reset_token" value="{{ $userToken->token }}">
 
                 <h2 class="auth-ttl">パスワードの変更</h2>
 
