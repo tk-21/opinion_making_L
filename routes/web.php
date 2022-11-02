@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CounterObjectionController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\OpinionController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
@@ -32,14 +33,31 @@ Route::controller(AuthController::class)
 
 
 //パスワードリセット
-Route::controller(PasswordResetController::class)
+Route::prefix('/password_reset')
+    ->name('password_reset.')
     ->group(function () {
-        Route::get('/request', 'showRequestForm')->name('showRequestForm');
-        Route::post('/request', 'request')->name('request');
-        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
-        Route::get('/reset_password', 'showResetForm')->name('showResetForm');
-        Route::post('/reset_password', 'reset')->name('reset_password');
+        Route::prefix('/email')
+            ->name('email.')
+            ->group(function () {
+                Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form');
+                Route::post('/', [PasswordController::class, 'sendEmailResetPassword'])->name('send');
+                Route::get('/send_complete', [PasswordController::class, 'sendComplete'])->name('send_complete');
+            });
+        Route::get('/edit', [PasswordController::class, 'edit'])->name('edit');
+        Route::post('/update', [PasswordController::class, 'update'])->name('update');
+        Route::get('/edited', [PasswordController::class, 'edited'])->name('edited');
     });
+
+
+//パスワードリセット
+//Route::controller(PasswordResetController::class)
+//    ->group(function () {
+//        Route::get('/request', 'showRequestForm')->name('showRequestForm');
+//        Route::post('/request', 'request')->name('request');
+//        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
+//        Route::get('/reset_password', 'showResetForm')->name('showResetForm');
+//        Route::post('/reset_password', 'reset')->name('reset_password');
+//    });
 
 
 //以下はログイン状態のときのみ表示
@@ -117,23 +135,6 @@ Route::middleware('auth')
                 Route::post('/', 'store')->name('store');
                 Route::get('/{opinion}', 'edit')->name('edit');
                 Route::put('/{opinion}', 'update')->name('update');
-            });
-
-
-//パスワードリセット
-        Route::prefix('/password_reset')
-            ->name('password_reset.')
-            ->group(function () {
-                Route::prefix('/email')
-                    ->name('email.')
-                    ->group(function () {
-                        Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form');
-                        Route::post('/', [PasswordController::class, 'sendEmailResetPassword'])->name('send');
-                        Route::get('/send_complete', [PasswordController::class, 'sendComplete'])->name('send_complete');
-                    });
-                Route::get('/edit', [PasswordController::class, 'edit'])->name('edit');
-                Route::post('/update', [PasswordController::class, 'update'])->name('update');
-                Route::get('/edited', [PasswordController::class, 'edited'])->name('edited');
             });
 
     });
