@@ -24,8 +24,15 @@ class UpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-//            'id' => ['required', 'exists:categories,id', 'numeric'],
             'name' => ['required']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'カテゴリー',
+        ];
+    }
+
 }

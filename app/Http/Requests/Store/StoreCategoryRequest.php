@@ -27,4 +27,12 @@ class StoreCategoryRequest extends FormRequest
             'name' => ['required']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'カテゴリー',
+        ];
+    }
+
 }

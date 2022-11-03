@@ -30,4 +30,14 @@ class StoreTopicRequest extends FormRequest
             'user_id' => ['required', 'numeric'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'title' => 'タイトル',
+            'body' => '本文',
+            'position' => 'ポジション'
+        ];
+    }
+
 }

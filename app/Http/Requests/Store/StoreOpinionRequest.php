@@ -29,4 +29,13 @@ class StoreOpinionRequest extends FormRequest
             'topic_id' => ['required', 'numeric'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'opinion' => '意見',
+            'reason' => '理由',
+        ];
+    }
+
 }

@@ -24,8 +24,15 @@ class UpdateObjectionRequest extends FormRequest
     public function rules()
     {
         return [
-//            'id' => ['required', 'exists:objections,id', 'numeric'],
             'body' => ['required']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'body' => '反論',
+        ];
+    }
+
 }

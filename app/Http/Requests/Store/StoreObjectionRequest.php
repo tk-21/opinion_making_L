@@ -28,4 +28,12 @@ class StoreObjectionRequest extends FormRequest
             'topic_id' => ['required', 'numeric'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'body' => '反論',
+        ];
+    }
+
 }

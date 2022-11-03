@@ -28,4 +28,13 @@ class LoginUserRequest extends FormRequest
             'password' => ['required', 'string', 'min:4', 'alpha-num']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'ユーザーネーム',
+            'password' => 'パスワード',
+        ];
+    }
+
 }
