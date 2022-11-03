@@ -24,11 +24,20 @@ class UpdateTopicRequest extends FormRequest
     public function rules()
     {
         return [
-//            'id' => ['required', 'exists:topics,id', 'numeric'],
             'title' => ['required'],
             'body' => ['required'],
             'position' => ['required'],
             'category_id' => ['required', 'numeric'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'title' => 'タイトル',
+            'body' => '本文',
+            'position' => 'ポジション'
+        ];
+    }
+
 }

@@ -29,4 +29,14 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email:filter,dns', 'max:255', 'unique:users']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'ユーザーネーム',
+            'password' => 'パスワード',
+            'email' => 'メールアドレス'
+        ];
+    }
+
 }

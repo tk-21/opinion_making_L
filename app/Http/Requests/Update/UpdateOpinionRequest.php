@@ -28,4 +28,13 @@ class UpdateOpinionRequest extends FormRequest
             'reason' => ['required']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'opinion' => '意見',
+            'reason' => '理由',
+        ];
+    }
+
 }

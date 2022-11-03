@@ -26,8 +26,16 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'password' => ['required', 'min:4', 'alpha-num', 'confirmed'],
-            'password_confirmation' => ['required', 'same:password'],
+            'password_confirmation' => ['required'],
             'reset_token' => ['required', new TokenExpirationTimeRule],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'password' => 'パスワード',
+            'password_confirmation' => 'パスワード'
         ];
     }
 
@@ -38,13 +46,7 @@ class ResetPasswordRequest extends FormRequest
             'password.min:4' => ':attributeは4桁以上で入力してください。',
             'password.alpha-num' => ':attributeは半角英数字で入力してください。',
             'password.confirmed' => ':attributeが再入力欄と一致していません。',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'password' => 'パスワード',
+            'password_confirmation.required' => '確認のため、再入力欄にも:attributeを入力してください。',
         ];
     }
 }

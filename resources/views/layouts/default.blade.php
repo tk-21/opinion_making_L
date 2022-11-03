@@ -100,7 +100,7 @@
 <script src="/js/jquery-3.6.0.min.js"></script>
 <!-- jQueryプラグイン -->
 <!-- js -->
-<script src="/js/form-validate.js"></script>
+{{--<script src="/js/form-validate.js"></script>--}}
 <script src="/js/ajax.js"></script>
 </body>
 
