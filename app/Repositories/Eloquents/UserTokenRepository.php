@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquents;
 
 use App\Models\UserToken;
 use App\Repositories\Interfaces\UserTokenRepositoryInterface;
+use Illuminate\Support\Carbon;
 
 class UserTokenRepository implements UserTokenRepositoryInterface
 {

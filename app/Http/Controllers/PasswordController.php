@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Requests\SendEmailRequest;
+use App\Http\Requests\ResetPassword\ResetPasswordRequest;
+use App\Http\Requests\ResetPassword\SendEmailRequest;
+use App\Mail\UserResetPasswordMail;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserTokenRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use function Symfony\Component\Translation\t;
 
 class PasswordController extends Controller
 {
@@ -42,7 +42,9 @@ class PasswordController extends Controller
     public function sendEmailResetPassword(SendEmailRequest $request)
     {
         try {
+//            メールアドレスからユーザーを取得
             $user = $this->userRepository->findFromEmail($request->email);
+//            ユーザーのパスワードリセット用トークンを発行。すでに存在していれば更新する。
             $userToken = $this->userTokenRepository->updateOrCreateUserToken($user->id);
 
             Log::info(__METHOD__ . '...ID: ' . $user->id . 'のユーザーにパスワード再設定用メールを送信します。');
@@ -76,7 +78,7 @@ class PasswordController extends Controller
 //    新しいパスワードの入力フォームを表示
     public function edit(Request $request)
     {
-        if ($request->hasValidSignature()) {
+        if (!$request->hasValidSignature()) {
             abort(403, 'URLの有効期限が過ぎたためエラーが発生しました。パスワードリセットメールを再発行してください。');
         }
 
@@ -89,7 +91,7 @@ class PasswordController extends Controller
             return to_route('password_reset.email.form')->with('error', 'パスワードリセットメールに添付されたURLから遷移してください。');
         }
 
-        return view('reset_password.edit')->with('user_token', $userToken);
+        return view('reset_password.edit')->with('userToken', $userToken);
     }
 
 
@@ -104,10 +106,21 @@ class PasswordController extends Controller
             Log::error(__METHOD__ . '...ユーザーのパスワードの更新に失敗しました。...error_message = ' . $e);
             return to_route('password_reset.email.form')->with('error', '処理に失敗しました。時間をおいて再度お試しください。');
         }
-
 //        更新時にセッションキーに値を保存
         $request->session()->put(self::UPDATE_PASSWORD_SESSION_KEY, 'update_password');
 
         return to_route('password_reset.edited');
     }
+
+
+//    パスワードリセット完了画面を表示
+    public function edited()
+    {
+        if (session()->pull(self::UPDATE_PASSWORD_SESSION_KEY) !== 'update_password') {
+            return to_route('password_reset.email.form')->with('error', '不正なリクエストです。');
+        }
+
+        return view('reset_password.edited');
+    }
+
 }

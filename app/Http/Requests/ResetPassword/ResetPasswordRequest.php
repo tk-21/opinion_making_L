@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ResetPassword;
 
+use App\Rules\TokenExpirationTimeRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
@@ -24,7 +25,7 @@ class ResetPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'password' => ['required', 'regex:/^[0-9a-zA-z-_]{8,32}$/', 'confirmed'],
+            'password' => ['required', 'min:4', 'alpha-num', 'confirmed'],
             'password_confirmation' => ['required', 'same:password'],
             'reset_token' => ['required', new TokenExpirationTimeRule],
         ];
@@ -33,9 +34,10 @@ class ResetPasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'password.required' => ':attributeを入力してください',
-            'password.regex' => ':attributeは半角英数字とハイフンとアンダーバーのみで8文字以上32文字以内で入力してください',
-            'password.confirmed' => ':attributeが再入力欄と一致していません',
+            'password.required' => ':attributeを入力してください。',
+            'password.min:4' => ':attributeは4桁以上で入力してください。',
+            'password.alpha-num' => ':attributeは半角英数字で入力してください。',
+            'password.confirmed' => ':attributeが再入力欄と一致していません。',
         ];
     }
 
