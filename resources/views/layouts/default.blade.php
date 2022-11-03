@@ -10,7 +10,7 @@
     <!--OGPの設定-->
     <meta property="og:title" content="意見作成トレーニングアプリ"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://opinion-making.com/"/>
+    <meta property="og:url" content=""/>
     <meta property="og:image" content="{OGP画像のURL}"/>
     <meta property="og:site_name" content="意見作成トレーニングアプリ"/>
     <meta property="og:description" content="自分の頭で考え、自分自身の意見をつくるトレーニングができます。"/>
@@ -97,11 +97,11 @@
 </div>
 
 <!-- jQuery本体 -->
-<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('/js/jquery-3.6.0.min.js') }}"></script>
 <!-- jQueryプラグイン -->
 <!-- js -->
-{{--<script src="/js/form-validate.js"></script>--}}
-<script src="/js/ajax.js"></script>
+<script src="{{ asset('/js/form-validate.js') }}"></script>
+<script src="{{ asset('/js/ajax.js') }}"></script>
 </body>
 
 </html>
