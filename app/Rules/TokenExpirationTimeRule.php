@@ -3,8 +3,8 @@
 namespace App\Rules;
 
 use App\Repositories\Interfaces\UserTokenRepositoryInterface;
-use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Carbon;
 
 class TokenExpirationTimeRule implements Rule
 {
