@@ -15,7 +15,7 @@ class StatusController extends Controller
         $topic = Topic::findOrFail($request->topic_id);
 
         // 反転させる
-        $status = $request->topic_status == '完了' ? '0' : '1';
+        $status = Topic::reverseStatus($request->topic_status);
 
         $result = $topic->update([
             'status' => $status

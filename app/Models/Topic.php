@@ -45,4 +45,9 @@ class Topic extends Model
     {
         return $this->hasMany(Opinion::class);
     }
+
+    public static function reverseStatus($status)
+    {
+        return $status == '完了' ? '0' : '1';
+    }
 }
