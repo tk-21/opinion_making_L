@@ -63,7 +63,7 @@ $(".home-topic-status").change(function () {
     };
 
     $.ajax({
-        url: '/topics/status',
+        url: '/api/status',
         type: "post",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         dataType: "json",

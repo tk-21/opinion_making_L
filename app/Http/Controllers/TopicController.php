@@ -86,22 +86,6 @@ class TopicController extends Controller
         return to_route('index')->with('info', 'トピックを削除しました。');
     }
 
-
-//    完了、未完了を切り替える
-    public function updateStatus(Request $request)
-    {
-        $topic = Topic::findOrFail($request->topic_id);
-
-        // 反転させる
-        $status = $request->topic_status == '完了' ? '0' : '1';
-
-        $result = $topic->update([
-            'status' => $status
-        ]);
-
-        return Response::json($result);
-    }
-
 }
 
 
