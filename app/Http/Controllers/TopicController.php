@@ -9,6 +9,7 @@ use App\Models\CounterObjection;
 use App\Models\Objection;
 use App\Models\Opinion;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -39,8 +40,13 @@ class TopicController extends Controller
     public function store(StoreTopicRequest $request)
     {
         $validated = $request->validated();
-        Topic::create($validated);
-        return to_route('index')->with('info', 'トピックを登録しました。');
+        try {
+            Topic::create($validated);
+            return to_route('index')->with('info', 'トピックを登録しました。');
+        } catch (Exception $e) {
+            report($e);
+            return back()->withErrors('トピックの登録に失敗しました。')->withInput($validated);
+        }
     }
 
 
