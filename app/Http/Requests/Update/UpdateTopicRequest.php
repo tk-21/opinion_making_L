@@ -27,7 +27,7 @@ class UpdateTopicRequest extends FormRequest
             'title' => ['required'],
             'body' => ['required'],
             'position' => ['required'],
-            'category_id' => ['required', 'numeric'],
+            'category_id' => ['nullable', 'numeric'],
         ];
     }
 
@@ -36,7 +36,7 @@ class UpdateTopicRequest extends FormRequest
         return [
             'title' => 'タイトル',
             'body' => '本文',
-            'position' => 'ポジション'
+            'position' => 'ポジション',
         ];
     }
 

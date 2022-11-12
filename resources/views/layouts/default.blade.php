@@ -77,6 +77,7 @@
         @if(session()->has('info'))
             <p class="msg msg-info">{{ session('info') }}</p>
         @endif
+
         {{--        失敗時--}}
         @if($errors->any())
             @foreach($errors->all() as $error)
@@ -100,7 +101,7 @@
 <script src="{{ asset('/js/jquery-3.6.0.min.js') }}"></script>
 <!-- jQueryプラグイン -->
 <!-- js -->
-<script src="{{ asset('/js/form-validate.js') }}"></script>
+{{--<script src="{{ asset('/js/form-validate.js') }}"></script>--}}
 <script src="{{ asset('/js/ajax.js') }}"></script>
 </body>
 

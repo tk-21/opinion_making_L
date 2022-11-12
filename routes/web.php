@@ -49,17 +49,6 @@ Route::prefix('/password_reset')
     });
 
 
-//パスワードリセット
-//Route::controller(PasswordResetController::class)
-//    ->group(function () {
-//        Route::get('/request', 'showRequestForm')->name('showRequestForm');
-//        Route::post('/request', 'request')->name('request');
-//        Route::get('/request/complete', 'showEmailSent')->name('request.complete');
-//        Route::get('/reset_password', 'showResetForm')->name('showResetForm');
-//        Route::post('/reset_password', 'reset')->name('reset_password');
-//    });
-
-
 //以下はログイン状態のときのみ表示
 Route::middleware('auth')
     ->group(function () {
@@ -84,7 +73,6 @@ Route::middleware('auth')
                 Route::put('/{topic}', 'update')->name('update');
                 Route::get('/delete/{topic}', 'confirmDelete')->name('confirmDelete');
                 Route::delete('/{topic}', 'destroy')->name('destroy');
-                Route::post('/status', 'updateStatus')->name('updateStatus');
             });
 
 
