@@ -21,9 +21,9 @@ class TopicController extends Controller
 //    トピック一覧画面表示
     public function index()
     {
-        $user_id = Auth::id();
-        $topics = Topic::where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(5);
-        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $topics = $user->topics()->orderBy('created_at', 'desc')->paginate(5);
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('index', compact('topics', 'categories'));
     }
 
@@ -31,9 +31,9 @@ class TopicController extends Controller
 //    トピック作成画面を表示
     public function create()
     {
-        $user_id = Auth::id();
-        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
-        return view('topics.create', compact('user_id', 'categories'));
+        $user = Auth::user();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
+        return view('topics.create', compact('user', 'categories'));
     }
 
 
@@ -70,7 +70,7 @@ class TopicController extends Controller
     public function edit(Topic $topic)
     {
         $user = Auth::user();
-        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('topics.edit', compact('topic', 'categories'));
     }
 
