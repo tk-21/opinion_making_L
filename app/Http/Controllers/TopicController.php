@@ -12,6 +12,7 @@ use App\Models\Topic;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
@@ -20,9 +21,9 @@ class TopicController extends Controller
 //    トピック一覧画面表示
     public function index()
     {
-        $user_id = Auth::id();
-        $topics = Topic::where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(5);
-        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $topics = $user->topics()->orderBy('created_at', 'desc')->paginate(5);
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('index', compact('topics', 'categories'));
     }
 
@@ -30,9 +31,9 @@ class TopicController extends Controller
 //    トピック作成画面を表示
     public function create()
     {
-        $user_id = Auth::id();
-        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
-        return view('topics.create', compact('user_id', 'categories'));
+        $user = Auth::user();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
+        return view('topics.create', compact('user', 'categories'));
     }
 
 
@@ -53,10 +54,15 @@ class TopicController extends Controller
 //    トピック詳細画面を表示
     public function show(Topic $topic)
     {
-        $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
-        $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
-        $opinion = Opinion::where('topic_id', $topic->id)->first();
-        return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
+        try {
+            $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+            $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
+            $opinion = Opinion::where('topic_id', $topic->id)->first();
+            return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
+        } catch (Exception $e) {
+            report($e);
+            return back()->withErrors('トピックの詳細表示に失敗しました。');
+        }
     }
 
 
@@ -64,7 +70,7 @@ class TopicController extends Controller
     public function edit(Topic $topic)
     {
         $user = Auth::user();
-        $categories = Category::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('topics.edit', compact('topic', 'categories'));
     }
 
@@ -73,8 +79,16 @@ class TopicController extends Controller
     public function update(UpdateTopicRequest $request, Topic $topic)
     {
         $updateData = $request->validated();
-        $topic->update($updateData);
-        return to_route('topics.show', ['topic' => $topic])->with('info', 'トピックを更新しました。');
+        try {
+            DB::beginTransaction();
+            $topic->update($updateData);
+            DB::commit();
+            return to_route('topics.show', ['topic' => $topic])->with('info', 'トピックを更新しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->withErrors('トピックの更新に失敗しました。')->withInput($updateData);
+        }
     }
 
 
@@ -88,8 +102,16 @@ class TopicController extends Controller
 //    トピック削除処理
     public function destroy(Topic $topic)
     {
-        $topic->delete();
-        return to_route('index')->with('info', 'トピックを削除しました。');
+        try {
+            DB::beginTransaction();
+            $topic->delete();
+            DB::commit();
+            return to_route('index')->with('info', 'トピックを削除しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->withErrors('トピックの削除に失敗しました。')->withInput($updateData);
+        }
     }
 
 }
