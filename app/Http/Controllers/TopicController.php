@@ -110,7 +110,7 @@ class TopicController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
-            return back()->withErrors('トピックの削除に失敗しました。')->withInput($updateData);
+            return back()->withErrors('トピックの削除に失敗しました。');
         }
     }
 
