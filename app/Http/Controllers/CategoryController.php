@@ -6,16 +6,16 @@ use App\Http\Requests\Store\StoreCategoryRequest;
 use App\Http\Requests\Update\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-//    カテゴリー一覧表示
     public function index()
     {
-//        $user_id = Auth::id();
-//        $categories = Category::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        //
     }
 
     /**
@@ -33,16 +33,22 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
+//        ログイン中ユーザーのIDを取得
         $validated['user_id'] = Auth::id();
-        Category::create($validated);
-        return to_route('index')->with('info', 'カテゴリーを作成しました。');
+        try {
+            Category::create($validated);
+            return to_route('index')->with('info', 'カテゴリーを作成しました。');
+        } catch (Exception $e) {
+            report($e);
+            return back()->withErrors('カテゴリーの作成に失敗しました。');
+        }
     }
 
 
     // カテゴリーに紐付くトピックスを表示する
     public function show(Category $category)
     {
-        $topics = Topic::where('category_id', $category->id)->orderBy('created_at', 'desc')->paginate(5);
+        $topics = $category->topics()->orderBy('created_at', 'desc')->paginate(5);
         $categories = Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         return view('categories.index', compact('category', 'topics', 'categories'));
     }
@@ -59,8 +65,16 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $updateData = $request->validated();
-        $category->update($updateData);
-        return to_route('categories.show', ['category' => $category])->with('info', 'カテゴリーを更新しました。');
+        try {
+            DB::beginTransaction();
+            $category->update($updateData);
+            DB::commit();
+            return to_route('categories.show', ['category' => $category])->with('info', 'カテゴリーを更新しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->withErrors('カテゴリーの更新に失敗しました。')->withInput($updateData);
+        }
     }
 
 
@@ -74,7 +88,15 @@ class CategoryController extends Controller
 //    カテゴリー削除処理
     public function destroy(Category $category)
     {
-        $category->delete();
-        return to_route('index')->with('info', 'カテゴリーを削除しました。');
+        try {
+            DB::beginTransaction();
+            $category->delete();
+            DB::commit();
+            return to_route('index')->with('info', 'カテゴリーを削除しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->withErrors('カテゴリーの削除に失敗しました。');
+        }
     }
 }
