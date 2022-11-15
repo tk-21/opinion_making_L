@@ -61,7 +61,7 @@ class TopicController extends Controller
             return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
         } catch (Exception $e) {
             report($e);
-            return back()->withErrors('トピックの詳細表示に失敗しました。');
+            return back()->withErrors('トピックの表示に失敗しました。');
         }
     }
 
