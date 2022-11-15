@@ -55,9 +55,9 @@ class TopicController extends Controller
     public function show(Topic $topic)
     {
         try {
-            $objections = Objection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
-            $counterObjections = CounterObjection::where('topic_id', $topic->id)->orderBy('created_at', 'asc')->get();
-            $opinion = Opinion::where('topic_id', $topic->id)->first();
+            $objections = $topic->objections()->orderBy('created_at', 'asc')->get();
+            $counterObjections = $topic->counterObjections()->orderBy('created_at', 'asc')->get();
+            $opinion = $topic->opinions()->first();
             return view('topics.show', compact('topic', 'objections', 'counterObjections', 'opinion'));
         } catch (Exception $e) {
             report($e);
