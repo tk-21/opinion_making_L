@@ -6,7 +6,9 @@ use App\Http\Requests\Store\StoreOpinionRequest;
 use App\Http\Requests\Update\UpdateOpinionRequest;
 use App\Models\Opinion;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OpinionController extends Controller
 {
@@ -32,8 +34,13 @@ class OpinionController extends Controller
     public function store(StoreOpinionRequest $request)
     {
         $validated = $request->validated();
-        Opinion::create($validated);
-        return to_route('topics.show', ['topic' => $validated['topic_id']])->with('info', '意見を作成しました。');
+        try {
+            Opinion::create($validated);
+            return to_route('topics.show', ['topic' => $validated['topic_id']])->with('info', '意見を作成しました。');
+        } catch (Exception $e) {
+            report($e);
+            return back()->withErrors('意見の作成に失敗しました。')->withInput($validated);
+        }
     }
 
 
@@ -60,8 +67,17 @@ class OpinionController extends Controller
     public function update(UpdateOpinionRequest $request, Opinion $opinion)
     {
         $updateData = $request->validated();
-        $opinion->update($updateData);
-        return to_route('topics.show', ['topic' => $opinion->topic_id])->with('info', '意見を更新しました。');
+        try {
+            DB::beginTransaction();
+            $opinion->update($updateData);
+            DB::commit();
+            return to_route('topics.show', ['topic' => $opinion->topic_id])->with('info', '意見を更新しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->withErrors('意見の更新に失敗しました。')->withInput($updateData);
+        }
+
     }
 
 
