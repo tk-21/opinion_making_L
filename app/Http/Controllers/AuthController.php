@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // ログイン画面を表示
     public function showLoginForm()
     {
         return view('auth.login');

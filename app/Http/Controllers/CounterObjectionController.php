@@ -12,28 +12,6 @@ use Illuminate\Support\Facades\Response;
 
 class CounterObjectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-
-//    反論への反論を登録する
     public function store(StoreObjectionRequest $request)
     {
         $validated = $request->validated();
@@ -47,26 +25,12 @@ class CounterObjectionController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-//    反論への反論編集画面を表示
     public function edit(CounterObjection $counterObjection)
     {
         return view('counter_objections.edit', ['counterObjection' => $counterObjection]);
     }
 
 
-//    反論への反論の更新処理
     public function update(UpdateObjectionRequest $request, CounterObjection $counterObjection)
     {
         $updateData = $request->validated();
