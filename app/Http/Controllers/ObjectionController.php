@@ -13,28 +13,6 @@ use function Symfony\Component\Translation\t;
 
 class ObjectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-
-//    反論を登録する
     public function store(StoreObjectionRequest $request)
     {
         $validated = $request->validated();
@@ -47,26 +25,13 @@ class ObjectionController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-
-//    反論編集画面を表示
     public function edit(Objection $objection)
     {
         return view('objections.edit', ['objection' => $objection]);
     }
 
 
-//    反論の更新処理
     public function update(UpdateObjectionRequest $request, Objection $objection)
     {
         $updateData = $request->validated();

@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Response;
 
 class TopicController extends Controller
 {
-//    トピック一覧画面表示
     public function index()
     {
         $user = Auth::user();
@@ -28,7 +27,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック作成画面を表示
     public function create()
     {
         $user = Auth::user();
@@ -37,7 +35,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック登録処理
     public function store(StoreTopicRequest $request)
     {
         $validated = $request->validated();
@@ -51,7 +48,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック詳細画面を表示
     public function show(Topic $topic)
     {
         try {
@@ -66,7 +62,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック編集画面を表示
     public function edit(Topic $topic)
     {
         $user = Auth::user();
@@ -75,7 +70,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック更新処理
     public function update(UpdateTopicRequest $request, Topic $topic)
     {
         $updateData = $request->validated();
@@ -99,7 +93,6 @@ class TopicController extends Controller
     }
 
 
-//    トピック削除処理
     public function destroy(Topic $topic)
     {
         try {
