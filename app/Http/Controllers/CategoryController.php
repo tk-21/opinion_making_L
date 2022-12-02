@@ -17,9 +17,10 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
 //        ログイン中ユーザーのIDを取得
-        $validated['user_id'] = Auth::id();
+//        $validated['user_id'] = Auth::id();
         try {
-            Category::create($validated);
+            $validated->user()->create(Auth::id());
+//            Category::create($validated);
             return to_route('index')->with('info', 'カテゴリーを作成しました。');
         } catch (Exception $e) {
             report($e);
