@@ -33,7 +33,8 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $topics = $category->topics()->orderBy('created_at', 'desc')->paginate(5);
-        $categories = Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('categories.index', compact('category', 'topics', 'categories'));
     }
 
