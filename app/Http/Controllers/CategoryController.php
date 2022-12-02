@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-//    カテゴリー作成
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
@@ -29,7 +28,6 @@ class CategoryController extends Controller
     }
 
 
-    // カテゴリーに紐付くトピックスを表示する
     public function show(Category $category)
     {
         $topics = $category->topics()->orderBy('created_at', 'desc')->paginate(5);
@@ -38,14 +36,12 @@ class CategoryController extends Controller
     }
 
 
-//    カテゴリー編集画面表示
     public function edit(Category $category)
     {
         return view('categories.edit', ['category' => $category]);
     }
 
 
-//    カテゴリー更新処理
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $updateData = $request->validated();
@@ -69,7 +65,6 @@ class CategoryController extends Controller
     }
 
 
-//    カテゴリー削除処理
     public function destroy(Category $category)
     {
         try {
