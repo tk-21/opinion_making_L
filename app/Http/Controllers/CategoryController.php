@@ -6,6 +6,7 @@ use App\Http\Requests\Store\StoreCategoryRequest;
 use App\Http\Requests\Update\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Topic;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,11 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
-//        ログイン中ユーザーのIDを取得
-//        $validated['user_id'] = Auth::id();
+        $user = Auth::user();
         try {
-            $validated->user()->create(Auth::id());
-//            Category::create($validated);
+            $user->categories()->create([
+                'name' => $validated['name']
+            ]);
             return to_route('index')->with('info', 'カテゴリーを作成しました。');
         } catch (Exception $e) {
             report($e);
@@ -32,7 +33,8 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $topics = $category->topics()->orderBy('created_at', 'desc')->paginate(5);
-        $categories = Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('categories.index', compact('category', 'topics', 'categories'));
     }
 
