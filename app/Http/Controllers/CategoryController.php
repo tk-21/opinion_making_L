@@ -32,6 +32,9 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        if ($category['user_id'] !== Auth::id()) {
+            abort(404);
+        }
         $topics = $category->topics()->orderBy('created_at', 'desc')->paginate(5);
         $user = Auth::user();
         $categories = $user->categories()->orderBy('created_at', 'desc')->get();
