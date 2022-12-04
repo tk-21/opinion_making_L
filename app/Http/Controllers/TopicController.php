@@ -50,6 +50,9 @@ class TopicController extends Controller
 
     public function show(Topic $topic)
     {
+        if ($topic['user_id'] !== Auth::id()) {
+            abort(404);
+        }
         try {
             $objections = $topic->objections()->orderBy('created_at', 'asc')->get();
             $counterObjections = $topic->counterObjections()->orderBy('created_at', 'asc')->get();
