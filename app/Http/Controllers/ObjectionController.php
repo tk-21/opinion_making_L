@@ -7,6 +7,7 @@ use App\Http\Requests\Update\UpdateObjectionRequest;
 use App\Models\Objection;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use function Symfony\Component\Translation\t;
@@ -28,6 +29,17 @@ class ObjectionController extends Controller
 
     public function edit(Objection $objection)
     {
+        $topic = $objection->topic()->first();
+        dd($topic['id']);
+        $user = $topic->user();
+        dd($user);
+        $result = $user['id'] === Auth::id();
+        dd($result);
+
+        dd($topic_id, $objection['topic_id']);
+        if ($objection['topic_id'] !== $topic_id) {
+            abort(404);
+        }
         return view('objections.edit', ['objection' => $objection]);
     }
 
