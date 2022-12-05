@@ -29,15 +29,8 @@ class ObjectionController extends Controller
 
     public function edit(Objection $objection)
     {
-        $topic = $objection->topic()->first();
-        dd($topic['id']);
-        $user = $topic->user();
-        dd($user);
-        $result = $user['id'] === Auth::id();
-        dd($result);
-
-        dd($topic_id, $objection['topic_id']);
-        if ($objection['topic_id'] !== $topic_id) {
+        $user_id = $objection->topic()->value('user_id');
+        if ($user_id !== Auth::id()) {
             abort(404);
         }
         return view('objections.edit', ['objection' => $objection]);
