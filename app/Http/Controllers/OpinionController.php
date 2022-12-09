@@ -8,6 +8,7 @@ use App\Models\Opinion;
 use App\Models\Topic;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OpinionController extends Controller
@@ -33,6 +34,10 @@ class OpinionController extends Controller
 
     public function edit(Opinion $opinion)
     {
+        $user_id = $opinion->topic()->value('user_id');
+        if ($user_id !== Auth::id()) {
+            abort(404);
+        }
         return view('opinions.edit', ['opinion' => $opinion]);
     }
 

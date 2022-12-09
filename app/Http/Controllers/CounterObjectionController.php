@@ -7,6 +7,7 @@ use App\Http\Requests\Update\UpdateObjectionRequest;
 use App\Models\CounterObjection;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -27,6 +28,10 @@ class CounterObjectionController extends Controller
 
     public function edit(CounterObjection $counterObjection)
     {
+        $user_id = $counterObjection->topic()->value('user_id');
+        if ($user_id !== Auth::id()) {
+            abort(404);
+        }
         return view('counter_objections.edit', ['counterObjection' => $counterObjection]);
     }
 
