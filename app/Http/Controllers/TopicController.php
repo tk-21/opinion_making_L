@@ -67,6 +67,9 @@ class TopicController extends Controller
 
     public function edit(Topic $topic)
     {
+        if ($topic['user_id'] !== Auth::id()) {
+            abort(404);
+        }
         $user = Auth::user();
         $categories = $user->categories()->orderBy('created_at', 'desc')->get();
         return view('topics.edit', compact('topic', 'categories'));

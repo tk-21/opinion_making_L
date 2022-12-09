@@ -44,6 +44,9 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        if ($category['user_id'] !== Auth::id()) {
+            abort(404);
+        }
         return view('categories.edit', ['category' => $category]);
     }
 
