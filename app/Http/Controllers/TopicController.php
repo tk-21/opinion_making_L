@@ -38,6 +38,7 @@ class TopicController extends Controller
     public function store(StoreTopicRequest $request)
     {
         $validated = $request->validated();
+        Log::debug($validated);
         try {
             Topic::create($validated);
             return to_route('index')->with('info', 'トピックを登録しました。');
