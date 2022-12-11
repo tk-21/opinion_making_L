@@ -7,14 +7,13 @@ use Monolog\Logger;
 use Monolog\Processor\IntrospectionProcessor;
 use Monolog\Processor\WebProcessor;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class CustomizeFormatter
 {
     /**
      * ログフォーマット
      */
-    private $logFormat = '[%extra.class%][][@%extra.function%][(%extra.line%)] %message%' . PHP_EOL;
+    private $logFormat = '[%datetime%][%channel%][%level_name%][%extra.ip%][user_id:%extra.userid%][user_name:%extra.username%][%extra.class%][%extra.function%][(%extra.line%)] %message%' . PHP_EOL;
 
     /**
      * 日付フォーマット
@@ -29,40 +28,30 @@ class CustomizeFormatter
      */
     public function __invoke($logger)
     {
-        // formatter
+        // ログのフォーマットと日付のフォーマットを指定する
         $formatter = new LineFormatter($this->logFormat, $this->dateFormat, true, true);
 
-        // extra(class,method)
+        // IntrospectionProcessorを使うとextraフィールドが使えるようになる
         $ip = new IntrospectionProcessor(Logger::DEBUG, ['Illuminate\\']);
 
-        // ip address
+        // WebProcessorを使うとextra.ipが使えるようになる
         $wp = new WebProcessor();
 
         foreach ($logger->getHandlers() as $handler) {
             $handler->setFormatter($formatter);
+            // pushProcessorするとextra情報をログに埋め込んでくれる
             $handler->pushProcessor($ip);
             $handler->pushProcessor($wp);
-            $handler->pushProcessor([$this, 'processLogRecord']);
+            // addExtraFields()を呼び出す。extra.useridとextra.usernameをログに埋め込んでくれる
+            $handler->pushProcessor([$this, 'addExtraFields']);
         }
     }
 
-    /**
-     * edit record data
-     *
-     * @param array $record
-     * @return array
-     */
-    public function processLogRecord(array $record): array
+    public function addExtraFields(array $record): array
     {
-        $userid = 'ログインしていない';
-        if (Auth::check()) {
-            $userid = Auth::id();
-        }
-
-        $record['extra'] += [
-            'userid' => $userid,
-            'localdate' => Carbon::now('JST')
-        ];
+        $user = Auth::user();
+        $record['extra']['userid'] = $user->id ?? null;
+        $record['extra']['username'] = $user ? $user->name : '未ログイン';
         return $record;
     }
 }
