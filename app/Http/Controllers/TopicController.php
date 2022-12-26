@@ -41,9 +41,11 @@ class TopicController extends Controller
         Log::debug($validated);
         try {
             Topic::create($validated);
+            Log::debug('success');
             return to_route('index')->with('info', 'トピックを登録しました。');
         } catch (Exception $e) {
             report($e);
+            Log::debug('fail');
             return back()->withErrors('トピックの登録に失敗しました。')->withInput($validated);
         }
     }
@@ -80,14 +82,17 @@ class TopicController extends Controller
     public function update(UpdateTopicRequest $request, Topic $topic)
     {
         $updateData = $request->validated();
+        Log::debug($updateData);
         try {
             DB::beginTransaction();
             $topic->update($updateData);
             DB::commit();
+            Log::debug('success');
             return to_route('topics.show', ['topic' => $topic])->with('info', 'トピックを更新しました。');
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
+            Log::debug('fail');
             return back()->withErrors('トピックの更新に失敗しました。')->withInput($updateData);
         }
     }
