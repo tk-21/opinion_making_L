@@ -11,20 +11,24 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
+        Log::debug($validated);
         $user = Auth::user();
         try {
             $user->categories()->create([
                 'name' => $validated['name']
             ]);
+            Log::debug('success');
             return to_route('index')->with('info', 'カテゴリーを作成しました。');
         } catch (Exception $e) {
             report($e);
+            Log::debug('fail');
             return back()->withErrors('カテゴリーの作成に失敗しました。');
         }
     }
@@ -54,14 +58,17 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $updateData = $request->validated();
+        Log::debug($updateData);
         try {
             DB::beginTransaction();
             $category->update($updateData);
             DB::commit();
+            Log::debug('success');
             return to_route('categories.show', ['category' => $category])->with('info', 'カテゴリーを更新しました。');
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
+            Log::debug('fail');
             return back()->withErrors('カテゴリーの更新に失敗しました。')->withInput($updateData);
         }
     }
