@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class CounterObjectionController extends Controller
@@ -16,11 +17,14 @@ class CounterObjectionController extends Controller
     public function store(StoreObjectionRequest $request)
     {
         $validated = $request->validated();
+        Log::debug($validated);
         try {
             CounterObjection::create($validated);
+            Log::debug('success');
             return back()->with('info', '反論への反論を登録しました。');
         } catch (Exception $e) {
             report($e);
+            Log::debug('fail');
             return back()->withErrors('反論への反論の登録に失敗しました。')->withInput($validated);
         }
     }
@@ -39,14 +43,17 @@ class CounterObjectionController extends Controller
     public function update(UpdateObjectionRequest $request, CounterObjection $counterObjection)
     {
         $updateData = $request->validated();
+        Log::debug($updateData);
         try {
             DB::beginTransaction();
             $counterObjection->update($updateData);
             DB::commit();
+            Log::debug('success');
             return to_route('topics.show', ['topic' => $counterObjection->topic_id])->with('info', '反論への反論を更新しました。');
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
+            Log::debug('fail');
             return back()->withErrors('反論への反論の更新に失敗しました。')->withInput($updateData);
 
         }
