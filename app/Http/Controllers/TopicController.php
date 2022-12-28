@@ -4,17 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Store\StoreTopicRequest;
 use App\Http\Requests\Update\UpdateTopicRequest;
-use App\Models\Category;
-use App\Models\CounterObjection;
-use App\Models\Objection;
-use App\Models\Opinion;
 use App\Models\Topic;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
 
 class TopicController extends Controller
 {
